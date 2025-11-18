@@ -1,10 +1,10 @@
-package config;
+package com.example.ticketservice.config;
 
-import entity.Category;
+import com.example.ticketservice.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import repository.CategoryRepository;
+import com.example.ticketservice.repository.CategoryRepository;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ public class InitData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
+        System.out.println("initdata running");
         Category category = new Category();
         category.setName("IT");
         category.setImportance(0);

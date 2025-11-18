@@ -1,19 +1,26 @@
-package service;
+package com.example.ticketservice.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+
+import com.example.ticketservice.entity.Mail;
 import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 
-public class MailReceiver {
+
+public class EmailReceiver {
 
     // 1. Erstat med dine login-oplysninger
-    private static final String HOST = "imap.gmail.com";
-    private static final String USERNAME = "ticketservicemas@gmail.com"; // Din fulde Gmail-adresse
-    private static final String APP_PASSWORD = "kicc hfld lpmd iybo"; // Vigtigt!
+    //private static final String HOST = "imap.gmail.com";
+    private static final String HOST = System.getenv("HOST");
+    //private static final String USERNAME = "ticketservicemas@gmail.com"; // Din fulde Gmail-adresse
+    private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
+    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo"; // Vigtigt!
+    private static final String APP_PASSWORD = System.getenv("APP_PASSWORD"); // Vigtigt!
 
-    public static void main(String[] args) {
+    public List<Mail> receiveMail() {
+        List<Mail> mails = new ArrayList<>();
         // 2. Definer IMAP/IMAPS egenskaberne
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
@@ -39,28 +46,26 @@ public class MailReceiver {
 
             // 5. Hent beskederne
             Message[] messages = inbox.getMessages();
-            System.out.println("Antal nye e-mails fundet: " + messages.length);
 
             // Gå igennem hver besked
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
+            if(!message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
+                {
 
-                System.out.println("------------------------------------");
-                System.out.println("Besked nr: " + (i + 1));
-                System.out.println("Emne: " + message.getSubject());
-                System.out.println("Afsender: " + InternetAddress.toString(message.getFrom()));
-                System.out.println("Dato: " + message.getSentDate());
 
                 // Hent selve e-mailens indhold
                 String content = getTextFromMessage(message);
-                System.out.println("Indhold (uddrag): " + content.substring(0, Math.min(content.length(), 200)) + "...");
 
                 // ********** Din Ticket-Oprettelses Logik **********
                 // F.eks.: Ticket ticket = createTicket(message.getSubject(), content, message.getFrom());
 
                 // Marker e-mailen som LÆST efter behandling:
                 message.setFlag(Flags.Flag.SEEN, true);
-            }
+
+                    String subject =  message.getSubject();
+                    mails.add(new Mail(subject, content));
+            }}
 
         } catch (NoSuchProviderException e) {
             System.err.println("IMAPS udbyder ikke fundet: " + e.getMessage());
@@ -83,6 +88,7 @@ public class MailReceiver {
                 e.printStackTrace();
             }
         }
+        return mails;
     }
 
     // Hjælpefunktion til at udtrække teksten fra Message-objektet (forenklet)

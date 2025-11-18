@@ -1,7 +1,7 @@
 package com.example.ticketservice;
 
-import entity.Mail;
-import service.EmailReceiver;
+import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.service.EmailReceiver;
 
 import java.util.List;
 

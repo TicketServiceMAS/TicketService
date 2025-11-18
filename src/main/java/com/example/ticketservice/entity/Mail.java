@@ -1,4 +1,4 @@
-package entity;
+package com.example.ticketservice.entity;
 
 public class Mail {
 
