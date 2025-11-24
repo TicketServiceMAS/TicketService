@@ -1,5 +1,6 @@
 package com.example.ticketservice.entity;
 
+import com.example.ticketservice.routing.DepartmentName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,13 +12,13 @@ import java.util.List;
 @Entity
 @Table(name = "category")
 
-public class Category {
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryID;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private DepartmentName departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
     @ElementCollection

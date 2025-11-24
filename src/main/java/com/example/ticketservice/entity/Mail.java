@@ -14,7 +14,7 @@ public class Mail {
     public String subject;
     public String content;
 
-    public Category category;
+    public Department department;
     public Priority priority;
     public boolean isMostImportant;
 

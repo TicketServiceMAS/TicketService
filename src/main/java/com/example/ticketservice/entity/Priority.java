@@ -1,5 +1,6 @@
 package com.example.ticketservice.entity;
 
+import com.example.ticketservice.routing.PriorityName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Priority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int priorityID;
     @Column(name = "name", nullable = false)
-    private String name;
+    private PriorityName priorityName;
     @Column(name = "importance", nullable = false)
     private int importance;
 
