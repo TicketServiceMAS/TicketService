@@ -1,4 +1,4 @@
-package com.example.ticketservice.routing;
+package com.example.ticketservice.util;
 
 public enum PriorityName {
     P1,

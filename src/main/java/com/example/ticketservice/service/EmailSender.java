@@ -5,15 +5,18 @@ import java.util.Properties;
 import com.example.ticketservice.entity.Mail;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailSender {
 
     // Erstat disse med dine egne oplysninger:
     private static final String SENDER_EMAIL = System.getenv("USERNAME");;
     private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
-    private static final String RECIPIENT_EMAIL = System.getenv("APP_PASSWORD");
 
     public void sendMail(Mail mail) {
+        String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
+
         // 1. Opsætning af SMTP-egenskaber (Gmail)
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -35,11 +38,11 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SENDER_EMAIL));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT_EMAIL));
-            message.setSubject("Test af automatisk afsendelse fra Java");
+            message.setSubject(mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName());
 
             // Opret e-mailens indhold (body)
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent("Dette er en test e-mail sendt fra et Java-program.", "text/plain; charset=utf-8");
+            mimeBodyPart.setContent(mail.getContent(), "text/plain; charset=utf-8");
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(mimeBodyPart);

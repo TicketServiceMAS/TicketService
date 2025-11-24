@@ -1,16 +1,29 @@
-package com.example.ticketservice.routing;
+package com.example.ticketservice.service;
 
+import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.entity.Priority;
+import com.example.ticketservice.repository.DepartmentRepository;
+import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.util.DepartmentName;
+import com.example.ticketservice.util.PriorityName;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TicketRouter {
 
     private final OpenAIClient client;
+    private DepartmentRepository departmentRepository;
+    private PriorityRepository priorityRepository;
 
-    public TicketRouter() {
+    public TicketRouter(DepartmentRepository departmentRepository, PriorityRepository priorityRepository) {
+        this.departmentRepository = departmentRepository;
+        this.priorityRepository = priorityRepository;
         // Uses OPENAI_API_KEY (and optionally ORG / PROJECT) from environment
         this.client = OpenAIOkHttpClient.fromEnv();
     }
@@ -19,6 +32,15 @@ public class TicketRouter {
      * Returnerer hvilken afdeling en ticket skal til
      * baseret på subject + body.
      */
+
+
+
+    public  void analyzer(Mail mail) {
+        Department department = departmentRepository.getDepartmentByDepartmentName(routeDepartment(mail.subject, mail.content));
+        Priority priority = priorityRepository.getPriorityByPriorityName(routePriority(mail.subject, mail.content));
+        mail.setDepartment(department);
+        mail.setPriority(priority);
+    }
     public DepartmentName routeDepartment(String subject, String body) {
         String prompt = buildPromptDepartment(subject, body);
 

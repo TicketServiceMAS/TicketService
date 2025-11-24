@@ -1,12 +1,18 @@
 package com.example.ticketservice;
 
-import com.example.ticketservice.routing.DepartmentName;
-import com.example.ticketservice.routing.PriorityName;
-import com.example.ticketservice.routing.TicketRouter;
+import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.repository.DepartmentRepository;
+import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.service.EmailSender;
+import com.example.ticketservice.util.DepartmentName;
+import com.example.ticketservice.util.PriorityName;
+import com.example.ticketservice.service.TicketRouter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 @SpringBootApplication
 public class TicketServiceApplication {
@@ -15,7 +21,7 @@ public class TicketServiceApplication {
         SpringApplication.run(TicketServiceApplication.class, args);
     }
 
-    @Bean
+  /*  @Bean
     public CommandLineRunner demoRouter() {
         return args -> {
             TicketRouter router = new TicketRouter();
@@ -34,5 +40,45 @@ public class TicketServiceApplication {
 
             System.out.println("Routed priority: " + pri);
         };
+    }*/
+
+    @Component
+    public class EmailTestRunner implements CommandLineRunner {
+
+        private final DepartmentRepository departmentRepository;
+        private final PriorityRepository priorityRepository;
+        private final EmailSender emailSender;
+        private final TicketRouter ticketRouter;
+
+        @Autowired// Spring injicerer de nødvendige objekter her
+        public EmailTestRunner(
+                DepartmentRepository departmentRepository,
+                PriorityRepository priorityRepository,
+                EmailSender emailSender,
+                TicketRouter ticketRouter) {
+            this.departmentRepository = departmentRepository;
+            this.priorityRepository = priorityRepository;
+            this.emailSender = emailSender;
+            this.ticketRouter = ticketRouter;
+        }
+
+        @Override
+        public void run(String... args) throws Exception {
+            System.out.println("--- Starter mail test ---");
+
+            Mail mail = new Mail();
+            mail.setID();
+            mail.setSubject("IT Problem");
+            mail.setContent("Jeg oplever problemer med at logge ind på Microsoft Office 365");
+            // mail.setSender("user@example.com"); // Husk at sætte afsender/modtager
+
+            // Din logik, nu med injicerede afhængigheder
+            ticketRouter.analyzer(mail);
+            emailSender.sendMail(mail);
+
+            System.out.println("--- Mail sendt (forhåbentlig) ---");
+            // Hvis du kun vil sende mailen én gang, kan du lukke appen her:
+            // System.exit(0);
+        }
     }
 }
