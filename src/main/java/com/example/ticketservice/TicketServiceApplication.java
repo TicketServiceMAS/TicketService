@@ -3,6 +3,7 @@ package com.example.ticketservice;
 import com.example.ticketservice.entity.Mail;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.service.EmailReceiver;
 import com.example.ticketservice.service.EmailSender;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
@@ -49,24 +50,26 @@ public class TicketServiceApplication {
         private final PriorityRepository priorityRepository;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
+        private final EmailReceiver emailReceiver;
 
         @Autowired// Spring injicerer de nødvendige objekter her
         public EmailTestRunner(
                 DepartmentRepository departmentRepository,
                 PriorityRepository priorityRepository,
                 EmailSender emailSender,
-                TicketRouter ticketRouter) {
+                TicketRouter ticketRouter, EmailReceiver emailReceiver) {
             this.departmentRepository = departmentRepository;
             this.priorityRepository = priorityRepository;
             this.emailSender = emailSender;
             this.ticketRouter = ticketRouter;
+            this.emailReceiver = emailReceiver;
         }
 
         @Override
         public void run(String... args) throws Exception {
             System.out.println("--- Starter mail test ---");
 
-            Mail mail = new Mail();
+           /* Mail mail = new Mail();
             mail.setID();
             mail.setSubject("IT Problem");
             mail.setContent("Jeg oplever problemer med at logge ind på Microsoft Office 365");
@@ -74,7 +77,12 @@ public class TicketServiceApplication {
 
             // Din logik, nu med injicerede afhængigheder
             ticketRouter.analyzer(mail);
-            emailSender.sendMail(mail);
+            emailSender.sendMail(mail); */
+            for (Mail mail: emailReceiver.receiveMail()){
+                mail.setID();
+                ticketRouter.analyzer(mail);
+                emailSender.sendMail(mail);
+            }
 
             System.out.println("--- Mail sendt (forhåbentlig) ---");
             // Hvis du kun vil sende mailen én gang, kan du lukke appen her:
