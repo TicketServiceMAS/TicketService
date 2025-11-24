@@ -1,19 +1,17 @@
-package service;
+package com.example.ticketservice.service;
 
 import java.util.Properties;
-
-import entity.Mail;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 
-public class EmailSender {
+public class MailSender {
 
     // Erstat disse med dine egne oplysninger:
-    private static final String SENDER_EMAIL = System.getenv("USERNAME");;
+    private static final String SENDER_EMAIL = "ticketservicemas@gmail.com";
     private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
-    private static final String RECIPIENT_EMAIL = System.getenv("APP_PASSWORD");
+    private static final String RECIPIENT_EMAIL = "agnethe.cpf@gmail.com";
 
-    public void sendMail(Mail mail) {
+    public static void main(String[] args) {
         // 1. Opsætning af SMTP-egenskaber (Gmail)
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
