@@ -1,5 +1,6 @@
 package com.example.ticketservice.entity;
 
+import com.example.ticketservice.routing.DepartmentName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,27 +10,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "category")
+@Table(name = "department")
 
-public class Category {
+public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryID;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private DepartmentName departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
-    @ElementCollection
-    @CollectionTable(
-            name = "category_keywords",
-            joinColumns = @JoinColumn(name = "category_ID")
-    )
-    @Column(name = "keyword")
-    private List<String> keywords;
-    @Column(name = "importance", nullable = false)
-    private int importance;
-
-
 
 }

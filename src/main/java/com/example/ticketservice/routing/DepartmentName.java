@@ -1,6 +1,6 @@
 package com.example.ticketservice.routing;
 
-public enum Department {
+public enum DepartmentName {
     SERVICE_DESK_L1,
     SERVICE_DESK_L2,
     WORKPLACE,

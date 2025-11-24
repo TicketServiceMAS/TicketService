@@ -1,6 +1,7 @@
 package com.example.ticketservice;
 
-import com.example.ticketservice.routing.Department;
+import com.example.ticketservice.routing.DepartmentName;
+import com.example.ticketservice.routing.PriorityName;
 import com.example.ticketservice.routing.TicketRouter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,13 +21,18 @@ public class TicketServiceApplication {
             TicketRouter router = new TicketRouter();
 
             String subject = "Bruger kan ikke logge på VPN";
-            String body = "Hej, jeg kan ikke forbinde til VPN hjemmefra, får fejl 619.";
+            String body = "Hej, jeg kan ikke forbinde til VPN hjemmefra, får fejl 619. Host Down og jeg har en small error";
 
-            Department dep = router.route(subject, body);
+            DepartmentName dep = router.routeDepartment(subject, body);
 
             System.out.println("=== AI ROUTING TEST ===");
             System.out.println("Subject: " + subject);
             System.out.println("Routed department: " + dep);
+
+
+            PriorityName pri = router.routePriority(subject, body);
+
+            System.out.println("Routed priority: " + pri);
         };
     }
 }
