@@ -21,7 +21,7 @@ public class TicketServiceApplication {
             TicketRouter router = new TicketRouter();
 
             String subject = "Bruger kan ikke logge på VPN";
-            String body = "Hej, jeg kan ikke forbinde til VPN hjemmefra, får fejl 619. Jeg oplever også meget høj CPU";
+            String body = "Hej, jeg kan ikke forbinde til VPN hjemmefra, får fejl 619. Host Down og jeg har en small error";
 
             DepartmentName dep = router.routeDepartment(subject, body);
 

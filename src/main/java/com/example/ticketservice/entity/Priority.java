@@ -22,14 +22,4 @@ public class Priority {
     private int priorityID;
     @Column(name = "name", nullable = false)
     private PriorityName priorityName;
-    @Column(name = "importance", nullable = false)
-    private int importance;
-
-    @ElementCollection
-    @CollectionTable(
-            name = "priority_keywords",
-            joinColumns = @JoinColumn(name = "priority_ID")
-    )
-    @Column(name = "keyword")
-    private List<String> keywords;
 }

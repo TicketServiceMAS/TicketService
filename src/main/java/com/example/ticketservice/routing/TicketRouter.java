@@ -20,7 +20,7 @@ public class TicketRouter {
      * baseret på subject + body.
      */
     public DepartmentName routeDepartment(String subject, String body) {
-        String prompt = buildPrompt(subject, body);
+        String prompt = buildPromptDepartment(subject, body);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                 .addUserMessage(prompt)
@@ -62,7 +62,7 @@ public class TicketRouter {
 
                 Du får en ticket (subject + body) og skal vælge PRÆCIS én afdeling.
 
-                Vælg KUN mellem disse afdelinger (brug kun selve nøgleordet som svar):
+                Vælg KUN mellem disse afdelinger (brug kun selve nøgleordet som svar) (hvis intet passer, så skriv UNKNOWN):
                 - SERVICE_DESK_L1: Første linje support, simple brugerproblemer, password reset, låst konto, “min pc virker ikke”, printer, standard software.
                 - SERVICE_DESK_L2: Mere komplekse incidents, fejl der kræver dybere fejlsøgning, eskalering fra L1.
                 - WORKPLACE: Klienter, laptops, desktop, standard image, Intune/Endpoint, Office 365 klient, Teams-klient.
@@ -70,7 +70,6 @@ public class TicketRouter {
                 - SECURITY: Antivirus, EDR, security alerts, phishing, kompromitterede konti, sikkerhedspolitikker.
                 - ERP: ERP-systemer (fx Business Central, Navision, SAP, AX), finans, indkøb, lager.
                 - CRM: CRM-løsninger, kundesystemer, salgs-pipeline, CRM-integration.
-                - UNKNOWN: Hvis du virkelig ikke kan afgøre det.
 
                 Regler:
                 - Svar KUN med navnet på afdelingen: fx SERVICE_DESK_L1
@@ -84,7 +83,7 @@ public class TicketRouter {
                 """.formatted(subject, body);
     }
     public PriorityName routePriority(String subject, String body) {
-        String prompt = buildPrompt(subject, body);
+        String prompt = buildPromptPriority(subject, body);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                 .addUserMessage(prompt)
@@ -120,13 +119,13 @@ public class TicketRouter {
         }
     }
 
-    private String buildPrompt(String subject, String body) {
+    private String buildPromptPriority(String subject, String body) {
         return """
                 Du er en routing-motor for IT-support tickets hos itm8.
 
                 Du får en ticket (subject + body) og skal vælge PRÆCIS én prioritet.
 
-                Vælg KUN mellem disse prioriteter (brug kun selve nøgleordet som svar):
+                Vælg KUN mellem disse prioriteter (brug kun selve nøgleordet som svar) (Herunder er de skrevet i den rækkefølge, hvor førstnævnte er vigtigst):
                 - SIMA: HOST DOWN, CRITICAL ALERT, SERVICE NOT RESPONDING, FILESYSTEM CRITICAL, CPU 100, MEMORY CRITICAL.
                 - P1: SERVER DOWN, SYSTEM DOWN, OUTAGE, OFFLINE, NETWORK DOWN, INTERNET DOWN, VPN DOWN, CRITICAL ALERT, EMERGENCY, HIGH SEVERITY, STORAGE FAILURE, HOST DOWN, ESXI HOST OFFLINE, POWER OUTAGE, BACKUP FAILURE,
                                       DATABASE DOWN, AUTHENTICATION SERVICE DOWN, DNS FAILURE.

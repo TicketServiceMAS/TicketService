@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "category")
+@Table(name = "department")
 
 public class Department {
     @Id
@@ -21,16 +21,5 @@ public class Department {
     private DepartmentName departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
-    @ElementCollection
-    @CollectionTable(
-            name = "category_keywords",
-            joinColumns = @JoinColumn(name = "category_ID")
-    )
-    @Column(name = "keyword")
-    private List<String> keywords;
-    @Column(name = "importance", nullable = false)
-    private int importance;
-
-
 
 }
