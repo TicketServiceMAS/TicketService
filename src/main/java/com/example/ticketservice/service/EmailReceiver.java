@@ -7,8 +7,9 @@ import java.util.Properties;
 import com.example.ticketservice.entity.Mail;
 import jakarta.mail.*;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class EmailReceiver {
 
     // 1. Erstat med dine login-oplysninger

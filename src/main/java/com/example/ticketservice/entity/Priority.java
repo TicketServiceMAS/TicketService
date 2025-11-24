@@ -1,13 +1,11 @@
 package com.example.ticketservice.entity;
 
-import com.example.ticketservice.routing.PriorityName;
+import com.example.ticketservice.util.PriorityName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

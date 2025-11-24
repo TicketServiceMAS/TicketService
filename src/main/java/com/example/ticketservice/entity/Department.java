@@ -1,10 +1,9 @@
 package com.example.ticketservice.entity;
 
-import com.example.ticketservice.routing.DepartmentName;
+import com.example.ticketservice.util.DepartmentName;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
