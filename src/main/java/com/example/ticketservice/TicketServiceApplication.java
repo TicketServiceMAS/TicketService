@@ -54,14 +54,14 @@ public class TicketServiceApplication {
         private final EmailReceiver emailReceiver;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
+        private final EmailReceiver emailReceiver;
 
         @Autowired// Spring injicerer de nødvendige objekter her
         public EmailTestRunner(
                 DepartmentRepository departmentRepository,
                 PriorityRepository priorityRepository,
                 EmailSender emailSender,
-                TicketRouter ticketRouter,
-                EmailReceiver emailReceiver) {
+                TicketRouter ticketRouter, EmailReceiver emailReceiver) {
             this.departmentRepository = departmentRepository;
             this.priorityRepository = priorityRepository;
             this.emailSender = emailSender;
@@ -73,7 +73,7 @@ public class TicketServiceApplication {
         public void run(String... args) throws Exception {
             System.out.println("--- Starter mail test ---");
 
-            Mail mail = new Mail();
+           /* Mail mail = new Mail();
             mail.setID();
             mail.setSubject("hello");
             mail.setContent("mine ERP-systemer og indkøb virker ikke");
@@ -83,8 +83,12 @@ public class TicketServiceApplication {
             //for (Mail mail : mails){
               //  mail.setID();
             ticketRouter.analyzer(mail);
-            System.out.println(mail.getDepartment().getDepartmentName());
-            emailSender.sendMail(mail);
+            emailSender.sendMail(mail); */
+            for (Mail mail: emailReceiver.receiveMail()){
+                mail.setID();
+                ticketRouter.analyzer(mail);
+                emailSender.sendMail(mail);
+            }
 
             System.out.println("--- Mail sendt (forhåbentlig) ---");
             // Hvis du kun vil sende mailen én gang, kan du lukke appen her:
