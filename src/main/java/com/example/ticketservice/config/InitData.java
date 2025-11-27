@@ -68,7 +68,7 @@ public class InitData implements CommandLineRunner {
         departmentRepository.save(department6);
 
         Department department7 = new Department();
-        department7.setDepartmentName(DepartmentName.UNKNOWN);
+        department7.setDepartmentName(DepartmentName.DEFAULT);
         department7.setMailAddress("sarahkiilm1310@gmail.com");
         departmentRepository.save(department7);
 

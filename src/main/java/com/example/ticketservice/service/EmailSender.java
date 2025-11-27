@@ -85,7 +85,7 @@ public class EmailSender {
         MetricsDepartment metricsDepartment = new MetricsDepartment();
         metricsDepartment.setSubject(newSubject);
         metricsDepartment.setStatus(Status.SUCCESS);
-        if (mail.getDepartment().getDepartmentName()== DepartmentName.UNKNOWN){
+        if (mail.getDepartment().getDepartmentName()== DepartmentName.DEFAULT){
             metricsDepartment.setStatus(Status.DEFAULTED);
         }
         metricsDepartmentRepository.save(metricsDepartment);

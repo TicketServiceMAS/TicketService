@@ -8,5 +8,5 @@ public enum DepartmentName {
     SECURITY,
     ERP,
     CRM,
-    UNKNOWN
+    DEFAULT
 }
