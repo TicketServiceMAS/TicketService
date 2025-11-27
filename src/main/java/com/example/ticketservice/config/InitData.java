@@ -1,10 +1,15 @@
 package com.example.ticketservice.config;
 
 import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.entity.Priority;
+import com.example.ticketservice.repository.MetricsDepartmentRepository;
+import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.repository.PriorityRepository;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
+import com.example.ticketservice.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,6 +23,12 @@ public class InitData implements CommandLineRunner {
 
     @Autowired
     PriorityRepository priorityRepository;
+
+    @Autowired
+    MetricsDepartmentRepository metricsDepartmentRepository;
+
+    @Autowired
+    MetricsPriorityRepository metricsPriorityRepository;
 
     @Override
     public void run(String... args) throws Exception{
@@ -57,7 +68,7 @@ public class InitData implements CommandLineRunner {
         departmentRepository.save(department6);
 
         Department department7 = new Department();
-        department7.setDepartmentName(DepartmentName.UNKNOWN);
+        department7.setDepartmentName(DepartmentName.DEFAULT);
         department7.setMailAddress("sarahkiilm1310@gmail.com");
         departmentRepository.save(department7);
 
@@ -77,5 +88,24 @@ public class InitData implements CommandLineRunner {
         priority3.setPriorityName(PriorityName.SIMA);
         priorityRepository.save(priority3);
 
+        MetricsDepartment metricsDepartment = new MetricsDepartment();
+        metricsDepartment.setStatus(Status.SUCCESS);
+        metricsDepartment.setSubject("12345a Help ERP P2");
+        metricsDepartmentRepository.save(metricsDepartment);
+
+        MetricsDepartment metricsDepartment1 = new MetricsDepartment();
+        metricsDepartment1.setStatus(Status.SUCCESS);
+        metricsDepartment1.setSubject("12a HELLO ERP P4");
+        metricsDepartmentRepository.save(metricsDepartment1);
+
+        MetricsPriority metricsPriority = new MetricsPriority();
+        metricsPriority.setStatus(Status.SUCCESS);
+        metricsPriority.setSubject("12345a Help ERP P2");
+        metricsPriorityRepository.save(metricsPriority);
+
+        MetricsPriority metricsPriority1 = new MetricsPriority();
+        metricsPriority1.setStatus(Status.SUCCESS);
+        metricsPriority1.setSubject("12a HELLO ERP P4");
+        metricsPriorityRepository.save(metricsPriority1);
     }
 }

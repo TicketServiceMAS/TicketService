@@ -1,7 +1,11 @@
 package com.example.ticketservice;
 
 import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.repository.DepartmentRepository;
+import com.example.ticketservice.repository.MetricsDepartmentRepository;
+import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.repository.PriorityRepository;
 import com.example.ticketservice.service.EmailReceiver;
 import com.example.ticketservice.service.EmailSender;
@@ -51,44 +55,66 @@ public class TicketServiceApplication {
         private final DepartmentRepository departmentRepository;
         private final PriorityRepository priorityRepository;
 
+        private final MetricsDepartmentRepository metricsDepartmentRepository;
+        private final MetricsPriorityRepository metricsPriorityRepository;
         private final EmailReceiver emailReceiver;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
-        private final EmailReceiver emailReceiver;
 
         @Autowired// Spring injicerer de nødvendige objekter her
         public EmailTestRunner(
                 DepartmentRepository departmentRepository,
                 PriorityRepository priorityRepository,
                 EmailSender emailSender,
-                TicketRouter ticketRouter, EmailReceiver emailReceiver) {
+                TicketRouter ticketRouter,
+                EmailReceiver emailReceiver,
+                MetricsDepartmentRepository metricsDepartmentRepository,
+                MetricsPriorityRepository metricsPriorityRepository) {
             this.departmentRepository = departmentRepository;
             this.priorityRepository = priorityRepository;
             this.emailSender = emailSender;
             this.ticketRouter = ticketRouter;
             this.emailReceiver = emailReceiver;
+            this.metricsDepartmentRepository = metricsDepartmentRepository;
+            this.metricsPriorityRepository = metricsPriorityRepository;
         }
 
         @Override
         public void run(String... args) throws Exception {
             System.out.println("--- Starter mail test ---");
 
-           /* Mail mail = new Mail();
+            System.out.println("Metrics Departments: ");
+            List<MetricsDepartment> metricsDepartments= metricsDepartmentRepository.findAll();
+            System.out.println("Metrics Departments: ");
+            for (MetricsDepartment md : metricsDepartments){
+                System.out.println(md.getSubject() + " " + md.getStatus());;
+            }
+
+
+            List<MetricsPriority> metricsPrioritiess= metricsPriorityRepository.findAll();
+            System.out.println("Metrics Priorities: ");
+            for (MetricsPriority mp : metricsPrioritiess){
+                System.out.println(mp.getSubject() + " " + mp.getStatus());
+            }
+
+            Mail mail = new Mail();
             mail.setID();
-            mail.setSubject("hello");
-            mail.setContent("mine ERP-systemer og indkøb virker ikke");
+            mail.setSubject("hjælp");
+            mail.setContent("");
+            System.out.println(mail.getSubject());
+            ticketRouter.analyzer(mail);
+            System.out.println(mail.getDepartment());
+            emailSender.sendMail(mail);
 
             // Din logik, nu med injicerede afhængigheder
-            //List<Mail> mails = emailReceiver.receiveMail();
-            //for (Mail mail : mails){
-              //  mail.setID();
-            ticketRouter.analyzer(mail);
-            emailSender.sendMail(mail); */
-            for (Mail mail: emailReceiver.receiveMail()){
+            /*List<Mail> mails = emailReceiver.receiveMail();
+
+            for (Mail mail: mails){
                 mail.setID();
                 ticketRouter.analyzer(mail);
-                emailSender.sendMail(mail);
-            }
+                System.out.println(mail.getDepartment().getDepartmentName());
+                emailSender.sendMail(mail);}*/
+
 
             System.out.println("--- Mail sendt (forhåbentlig) ---");
             // Hvis du kun vil sende mailen én gang, kan du lukke appen her:
