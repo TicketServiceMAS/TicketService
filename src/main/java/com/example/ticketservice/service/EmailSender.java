@@ -3,6 +3,10 @@ package com.example.ticketservice.service;
 import java.util.Properties;
 
 import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.util.DepartmentName;
+import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import org.springframework.stereotype.Service;
@@ -16,8 +20,10 @@ public class EmailSender {
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
+       // String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
 
         // 1. Opsætning af SMTP-egenskaber (Gmail)
+        String content = mail.getContent();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -58,6 +64,24 @@ public class EmailSender {
             e.printStackTrace();
             System.err.println("Fejl under afsendelse af e-mail: " + e.getMessage());
         }
+        //createMetrics(newSubject, mail);
+    }
+
+    public void createMetrics(String newSubject, Mail mail){
+        MetricsPriority metricsPriority = new MetricsPriority();
+        metricsPriority.setSubject(newSubject);
+        metricsPriority.setStatus(Status.SUCCESS);
+
+        MetricsDepartment metricsDepartment = new MetricsDepartment();
+        metricsDepartment.setSubject(newSubject);
+        metricsDepartment.setStatus(Status.SUCCESS);
+        if (mail.getDepartment().getDepartmentName()== DepartmentName.UNKNOWN){
+            metricsDepartment.setStatus(Status.DEFAULTED);
+        }
+
+
+
+
     }
 
 }

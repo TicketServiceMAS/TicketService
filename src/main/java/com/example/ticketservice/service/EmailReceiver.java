@@ -12,12 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailReceiver {
 
-    // 1. Erstat med dine login-oplysninger
-    //private static final String HOST = "imap.gmail.com";
     private static final String HOST = System.getenv("HOST");
-    //private static final String USERNAME = "ticketservicemas@gmail.com"; // Din fulde Gmail-adresse
     private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
-    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo"; // Vigtigt!
     private static final String APP_PASSWORD = System.getenv("APP_PASSWORD"); // Vigtigt!
 
     public List<Mail> receiveMail() {
@@ -51,7 +47,7 @@ public class EmailReceiver {
             // Gå igennem hver besked
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
-            if(!message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
+            if(message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
                 {
 
 

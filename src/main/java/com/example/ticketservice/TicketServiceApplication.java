@@ -3,6 +3,7 @@ package com.example.ticketservice;
 import com.example.ticketservice.entity.Mail;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.service.EmailReceiver;
 import com.example.ticketservice.service.EmailSender;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
@@ -47,6 +48,8 @@ public class TicketServiceApplication {
 
         private final DepartmentRepository departmentRepository;
         private final PriorityRepository priorityRepository;
+
+        private final EmailReceiver emailReceiver;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
 
@@ -55,26 +58,29 @@ public class TicketServiceApplication {
                 DepartmentRepository departmentRepository,
                 PriorityRepository priorityRepository,
                 EmailSender emailSender,
-                TicketRouter ticketRouter) {
+                TicketRouter ticketRouter,
+                EmailReceiver emailReceiver) {
             this.departmentRepository = departmentRepository;
             this.priorityRepository = priorityRepository;
             this.emailSender = emailSender;
             this.ticketRouter = ticketRouter;
+            this.emailReceiver = emailReceiver;
         }
 
         @Override
         public void run(String... args) throws Exception {
             System.out.println("--- Starter mail test ---");
 
-            Mail mail = new Mail();
+            /*Mail mail = new Mail();
             mail.setID();
-            mail.setSubject("IT Problem");
-            mail.setContent("Jeg oplever problemer med at logge ind på Microsoft Office 365");
-            // mail.setSender("user@example.com"); // Husk at sætte afsender/modtager
+            mail.setSubject("hello");
+            mail.setContent("mine ERP-systemer og indkøb virker ikke");*/
 
             // Din logik, nu med injicerede afhængigheder
+            for (Mail mail : emailReceiver.receiveMail()){
             ticketRouter.analyzer(mail);
-            emailSender.sendMail(mail);
+            System.out.println(mail.getDepartment().getDepartmentName());
+            emailSender.sendMail(mail);}
 
             System.out.println("--- Mail sendt (forhåbentlig) ---");
             // Hvis du kun vil sende mailen én gang, kan du lukke appen her:
