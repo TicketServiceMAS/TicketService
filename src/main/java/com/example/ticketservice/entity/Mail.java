@@ -17,10 +17,12 @@ public class Mail {
     public Department department;
     public Priority priority;
     public boolean isMostImportant;
+    public boolean hasDepartment;
 
     public Mail(String subject, String content) {
         this.subject = subject;
         this.content = content;
+
     }
 
     public void setID(){

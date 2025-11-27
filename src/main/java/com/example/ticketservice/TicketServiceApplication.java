@@ -15,6 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @SpringBootApplication
 public class TicketServiceApplication {
 
@@ -48,6 +50,8 @@ public class TicketServiceApplication {
 
         private final DepartmentRepository departmentRepository;
         private final PriorityRepository priorityRepository;
+
+        private final EmailReceiver emailReceiver;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
         private final EmailReceiver emailReceiver;
@@ -71,11 +75,13 @@ public class TicketServiceApplication {
 
            /* Mail mail = new Mail();
             mail.setID();
-            mail.setSubject("IT Problem");
-            mail.setContent("Jeg oplever problemer med at logge ind på Microsoft Office 365");
-            // mail.setSender("user@example.com"); // Husk at sætte afsender/modtager
+            mail.setSubject("hello");
+            mail.setContent("mine ERP-systemer og indkøb virker ikke");
 
             // Din logik, nu med injicerede afhængigheder
+            //List<Mail> mails = emailReceiver.receiveMail();
+            //for (Mail mail : mails){
+              //  mail.setID();
             ticketRouter.analyzer(mail);
             emailSender.sendMail(mail); */
             for (Mail mail: emailReceiver.receiveMail()){
