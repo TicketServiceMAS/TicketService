@@ -15,6 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @SpringBootApplication
 public class TicketServiceApplication {
 
@@ -71,16 +73,18 @@ public class TicketServiceApplication {
         public void run(String... args) throws Exception {
             System.out.println("--- Starter mail test ---");
 
-            /*Mail mail = new Mail();
+            Mail mail = new Mail();
             mail.setID();
             mail.setSubject("hello");
-            mail.setContent("mine ERP-systemer og indkøb virker ikke");*/
+            mail.setContent("mine ERP-systemer og indkøb virker ikke");
 
             // Din logik, nu med injicerede afhængigheder
-            for (Mail mail : emailReceiver.receiveMail()){
+            //List<Mail> mails = emailReceiver.receiveMail();
+            //for (Mail mail : mails){
+              //  mail.setID();
             ticketRouter.analyzer(mail);
             System.out.println(mail.getDepartment().getDepartmentName());
-            emailSender.sendMail(mail);}
+            emailSender.sendMail(mail);
 
             System.out.println("--- Mail sendt (forhåbentlig) ---");
             // Hvis du kun vil sende mailen én gang, kan du lukke appen her:

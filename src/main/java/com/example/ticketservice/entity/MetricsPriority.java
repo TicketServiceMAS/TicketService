@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "metrics_priorty")
+@Table(name = "metrics_priority")
 public class MetricsPriority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

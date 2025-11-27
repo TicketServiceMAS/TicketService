@@ -47,7 +47,7 @@ public class EmailReceiver {
             // Gå igennem hver besked
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
-            if(message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
+            if(!message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
                 {
 
 
