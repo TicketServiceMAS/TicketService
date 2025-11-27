@@ -74,7 +74,7 @@ public class TicketRouter {
             return DepartmentName.valueOf(normalized);
         } catch (IllegalArgumentException e) {
             System.out.println("Kunne ikke mappe AI-svar '" + raw + "' til Department, sætter UNKNOWN");
-            return DepartmentName.UNKNOWN;
+            return DepartmentName.DEFAULT;
         }
     }
 
@@ -84,7 +84,7 @@ public class TicketRouter {
 
                 Du får en ticket (subject + body) og skal vælge PRÆCIS én afdeling.
 
-                Vælg KUN mellem disse afdelinger (brug kun selve nøgleordet som svar) (hvis intet passer, så skriv UNKNOWN):
+                Vælg KUN mellem disse afdelinger (brug kun selve nøgleordet som svar) (hvis intet passer, så skriv DEFAULT):
                 - SERVICE_DESK_L1: Første linje support, simple brugerproblemer, password reset, låst konto, “min pc virker ikke”, printer, standard software.
                 - SERVICE_DESK_L2: Mere komplekse incidents, fejl der kræver dybere fejlsøgning, eskalering fra L1.
                 - WORKPLACE: Klienter, laptops, desktop, standard image, Intune/Endpoint, Office 365 klient, Teams-klient.

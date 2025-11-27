@@ -9,6 +9,7 @@ import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.repository.PriorityRepository;
 import com.example.ticketservice.service.EmailReceiver;
 import com.example.ticketservice.service.EmailSender;
+import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
 import com.example.ticketservice.service.TicketRouter;
@@ -57,6 +58,8 @@ public class TicketServiceApplication {
 
         private final MetricsDepartmentRepository metricsDepartmentRepository;
         private final MetricsPriorityRepository metricsPriorityRepository;
+
+        private final MetricsService metricsService;
         private final EmailReceiver emailReceiver;
         private final EmailSender emailSender;
         private final TicketRouter ticketRouter;
@@ -69,7 +72,8 @@ public class TicketServiceApplication {
                 TicketRouter ticketRouter,
                 EmailReceiver emailReceiver,
                 MetricsDepartmentRepository metricsDepartmentRepository,
-                MetricsPriorityRepository metricsPriorityRepository) {
+                MetricsPriorityRepository metricsPriorityRepository,
+                MetricsService metricsService) {
             this.departmentRepository = departmentRepository;
             this.priorityRepository = priorityRepository;
             this.emailSender = emailSender;
@@ -77,6 +81,7 @@ public class TicketServiceApplication {
             this.emailReceiver = emailReceiver;
             this.metricsDepartmentRepository = metricsDepartmentRepository;
             this.metricsPriorityRepository = metricsPriorityRepository;
+            this.metricsService = metricsService;
         }
 
         @Override
@@ -84,16 +89,16 @@ public class TicketServiceApplication {
             System.out.println("--- Starter mail test ---");
 
             System.out.println("Metrics Departments: ");
-            List<MetricsDepartment> metricsDepartments= metricsDepartmentRepository.findAll();
+            List<MetricsDepartment> metricsDepartments= metricsService.getAllMetricsDepartments();
             System.out.println("Metrics Departments: ");
             for (MetricsDepartment md : metricsDepartments){
                 System.out.println(md.getSubject() + " " + md.getStatus());;
             }
 
 
-            List<MetricsPriority> metricsPrioritiess= metricsPriorityRepository.findAll();
+            List<MetricsPriority> metricsPriorities= metricsService.getAllMetricsPriorities();
             System.out.println("Metrics Priorities: ");
-            for (MetricsPriority mp : metricsPrioritiess){
+            for (MetricsPriority mp : metricsPriorities){
                 System.out.println(mp.getSubject() + " " + mp.getStatus());
             }
 
