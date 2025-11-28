@@ -4,6 +4,8 @@ import com.example.ticketservice.util.DepartmentName;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,5 +22,7 @@ public class Department {
     private String departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MetricsDepartment> metricsDepartments;
 
 }

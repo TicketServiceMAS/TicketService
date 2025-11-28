@@ -2,6 +2,7 @@ package com.example.ticketservice.entity;
 
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,12 @@ public class MetricsPriority {
 
     @Column(name = "status", nullable = false)
     private Status status;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "priorities_id", nullable = false)
+    private Priority priority;
+
 
 
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +22,6 @@ public class Priority {
     private int priorityID;
     @Column(name = "name", nullable = false)
     private String priorityName;
+    @OneToMany(mappedBy = "priority", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MetricsPriority> metricsPriorities;
 }

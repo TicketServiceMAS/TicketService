@@ -10,6 +10,7 @@ import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.Status;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,6 +61,38 @@ public class MetricsService {
                 accuracy
         );
     }
+
+    public RoutingStatsDTO getMetricsDepartments(int id) {
+
+        // Hent alle metrics (én per ticket)
+        List<MetricsDepartment> all = metricsDepartmentRepository.findAllById(Collections.singleton(id));
+
+        int total = all.size();
+
+        int success = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.SUCCESS)
+                .count();
+
+        int failure = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.FAILURE)
+                .count();
+
+        int defaulted = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.DEFAULTED)
+                .count();
+
+        double accuracy = total > 0 ? (double) success / total : 0.0;
+
+        return new RoutingStatsDTO(
+                total,
+                success,
+                failure,
+                defaulted,
+                accuracy
+        );
+    }
+
+
 
     public MetricsDepartment getMetricsDepartment(int id){
         return metricsDepartmentRepository.findById(id)
