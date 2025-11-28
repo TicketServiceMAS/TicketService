@@ -1,12 +1,11 @@
 package com.example.ticketservice.entity;
 
+import com.example.ticketservice.util.PriorityName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,15 +19,5 @@ public class Priority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int priorityID;
     @Column(name = "name", nullable = false)
-    private String name;
-    @Column(name = "importance", nullable = false)
-    private int importance;
-
-    @ElementCollection
-    @CollectionTable(
-            name = "priority_keywords",
-            joinColumns = @JoinColumn(name = "priority_ID")
-    )
-    @Column(name = "keyword")
-    private List<String> keywords;
+    private PriorityName priorityName;
 }

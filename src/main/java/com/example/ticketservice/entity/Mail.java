@@ -14,13 +14,15 @@ public class Mail {
     public String subject;
     public String content;
 
-    public Category category;
+    public Department department;
     public Priority priority;
     public boolean isMostImportant;
+    public boolean hasDepartment;
 
     public Mail(String subject, String content) {
         this.subject = subject;
         this.content = content;
+
     }
 
     public void setID(){

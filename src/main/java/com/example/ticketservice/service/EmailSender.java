@@ -3,18 +3,37 @@ package com.example.ticketservice.service;
 import java.util.Properties;
 
 import com.example.ticketservice.entity.Mail;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.repository.MetricsDepartmentRepository;
+import com.example.ticketservice.repository.MetricsPriorityRepository;
+import com.example.ticketservice.util.DepartmentName;
+import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailSender {
+
+    private MetricsDepartmentRepository metricsDepartmentRepository;
+    private MetricsPriorityRepository metricsPriorityRepository;
+
+    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository){
+        this.metricsDepartmentRepository = metricsDepartmentRepository;
+        this.metricsPriorityRepository = metricsPriorityRepository;
+    }
 
     // Erstat disse med dine egne oplysninger:
     private static final String SENDER_EMAIL = System.getenv("USERNAME");;
     private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
-    private static final String RECIPIENT_EMAIL = System.getenv("APP_PASSWORD");
 
     public void sendMail(Mail mail) {
+        String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
+        String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
+
         // 1. Opsætning af SMTP-egenskaber (Gmail)
+        String content = mail.getContent();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -35,11 +54,11 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SENDER_EMAIL));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT_EMAIL));
-            message.setSubject("Test af automatisk afsendelse fra Java");
+            message.setSubject(newSubject);
 
             // Opret e-mailens indhold (body)
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent("Dette er en test e-mail sendt fra et Java-program.", "text/plain; charset=utf-8");
+            mimeBodyPart.setContent(mail.getContent(), "text/plain; charset=utf-8");
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(mimeBodyPart);
@@ -55,6 +74,27 @@ public class EmailSender {
             e.printStackTrace();
             System.err.println("Fejl under afsendelse af e-mail: " + e.getMessage());
         }
+        createMetrics(newSubject, mail);
+    }
+
+    public void createMetrics(String newSubject, Mail mail){
+        MetricsPriority metricsPriority = new MetricsPriority();
+        metricsPriority.setSubject(newSubject);
+        metricsPriority.setStatus(Status.SUCCESS);
+
+        MetricsDepartment metricsDepartment = new MetricsDepartment();
+        metricsDepartment.setSubject(newSubject);
+        metricsDepartment.setStatus(Status.SUCCESS);
+        if (mail.getDepartment().getDepartmentName()== DepartmentName.DEFAULT){
+            metricsDepartment.setStatus(Status.DEFAULTED);
+        }
+        metricsDepartmentRepository.save(metricsDepartment);
+        metricsPriorityRepository.save(metricsPriority);
+
+
+
+
+
     }
 
 }

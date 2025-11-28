@@ -7,16 +7,13 @@ import java.util.Properties;
 import com.example.ticketservice.entity.Mail;
 import jakarta.mail.*;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class EmailReceiver {
 
-    // 1. Erstat med dine login-oplysninger
-    //private static final String HOST = "imap.gmail.com";
     private static final String HOST = System.getenv("HOST");
-    //private static final String USERNAME = "ticketservicemas@gmail.com"; // Din fulde Gmail-adresse
     private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
-    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo"; // Vigtigt!
     private static final String APP_PASSWORD = System.getenv("APP_PASSWORD"); // Vigtigt!
 
     public List<Mail> receiveMail() {
