@@ -19,5 +19,5 @@ public class Priority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int priorityID;
     @Column(name = "name", nullable = false)
-    private PriorityName priorityName;
+    private String priorityName;
 }

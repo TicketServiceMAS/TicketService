@@ -73,19 +73,19 @@ public class InitData implements CommandLineRunner {
         departmentRepository.save(department7);
 
         Priority priority = new Priority();
-        priority.setPriorityName(PriorityName.P1);
+        priority.setPriorityName("P1");
         priorityRepository.save(priority);
 
         Priority priority1 = new Priority();
-        priority1.setPriorityName(PriorityName.P2);
+        priority1.setPriorityName("P2");
         priorityRepository.save(priority1);
 
         Priority priority2 = new Priority();
-        priority2.setPriorityName(PriorityName.P3);
+        priority2.setPriorityName("P3");
         priorityRepository.save(priority2);
 
         Priority priority3 = new Priority();
-        priority3.setPriorityName(PriorityName.SIMA);
+        priority3.setPriorityName("SIMA");
         priorityRepository.save(priority3);
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
