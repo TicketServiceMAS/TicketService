@@ -33,6 +33,11 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
+    public Department getDepartment(int id){
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Department not found with ID " + id));
+    }
+
     public Department createDepartment(Department department) {
         return departmentRepository.save(department);
     }
