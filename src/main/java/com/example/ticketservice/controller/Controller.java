@@ -1,9 +1,11 @@
 package com.example.ticketservice.controller;
 
+import com.example.ticketservice.dto.DepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsDTO;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,8 @@ public class Controller {
     private final MetricsService metricsService;
     private final DepartmentService departmentService;
 
-    public Controller(MetricsService metricsService,
-                      DepartmentService departmentService) {
+
+    public Controller(MetricsService metricsService, DepartmentService departmentService) {
         this.metricsService = metricsService;
         this.departmentService = departmentService;
     }
@@ -40,4 +42,10 @@ public class Controller {
         Department createdDepartment = departmentService.createDepartment(department);
         return ResponseEntity.ok(createdDepartment);
     }
+
+    @GetMapping("/departments")
+        public List<Department> getDepartments(){
+            return departmentService.getDepartments();
+    }
+
 }

@@ -17,7 +17,7 @@ public class Department {
     private int categoryID;
 
     @Column(name = "name", nullable = false)
-    private DepartmentName departmentName;
+    private String departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
 
