@@ -30,10 +30,17 @@ public class Controller {
         return metricsService.getRoutingStats();
     }
 
+    // NYT: hent alle departments
+    @GetMapping("/departments")
+    public List<Department> getDepartments() {
+        return departmentService.getAllDepartments();
+    }
+
+    // BONUS: opret department (hvis du vil bruge det senere)
     @PostMapping("/department/create")
-    public ResponseEntity<?> createDepartment(DepartmentDTO departmentDTO){
-        Department createdDepartment = departmentService.createDepartment(departmentDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdDepartment);
+    public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
+        Department createdDepartment = departmentService.createDepartment(department);
+        return ResponseEntity.ok(createdDepartment);
     }
 
     @GetMapping("/departments")
