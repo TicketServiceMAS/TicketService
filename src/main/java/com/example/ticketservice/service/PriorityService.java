@@ -23,6 +23,11 @@ public class PriorityService {
         return priorityRepository.findAll();
     }
 
+    public Priority getPriority(int id){
+        return priorityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
+    }
+
     public Priority createPriority(Priority priority) {
         return priorityRepository.save(priority);
     }

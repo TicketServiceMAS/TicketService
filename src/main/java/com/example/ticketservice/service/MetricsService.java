@@ -3,8 +3,10 @@ package com.example.ticketservice.service;
 import com.example.ticketservice.dto.RoutingStatsDTO;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
+import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.Status;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,13 @@ public class MetricsService {
 
     private final MetricsDepartmentRepository metricsDepartmentRepository;
 
+    private final MetricsPriorityRepository metricsPriorityRepository;
+
     private final DepartmentRepository departmentRepository;
 
-    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository, DepartmentRepository departmentRepository) {
+    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository,MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository) {
         this.metricsDepartmentRepository = metricsDepartmentRepository;
+        this.metricsPriorityRepository = metricsPriorityRepository;
         this.departmentRepository = departmentRepository;
     }
 
@@ -54,6 +59,17 @@ public class MetricsService {
                 defaulted,
                 accuracy
         );
+    }
+
+    public MetricsDepartment getMetricsDepartment(int id){
+        return metricsDepartmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
+    }
+
+    public MetricsPriority getMetricsPriority(int id){
+        return metricsPriorityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
+
     }
 
 

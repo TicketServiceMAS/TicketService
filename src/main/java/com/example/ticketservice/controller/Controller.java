@@ -34,10 +34,38 @@ public class Controller {
         return metricsService.getRoutingStats();
     }
 
+    @GetMapping("/stats/departments/{id}")
+    public ResponseEntity<?> getMetricsDepartment(@PathVariable int id){
+        try {
+            return ResponseEntity.ok(metricsService.getMetricsDepartment(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/stats/priorities/{id}")
+    public ResponseEntity<?> getMetricsPriorities(@PathVariable int id){
+        try {
+            return ResponseEntity.ok(metricsService.getMetricsPriority(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     // NYT: hent alle departments
     @GetMapping("/departments")
     public List<Department> getDepartments() {
         return departmentService.getAllDepartments();
+    }
+
+    @GetMapping("/departments/{id}")
+    public ResponseEntity<?> getDepartment(@PathVariable int id){
+        try {
+            return ResponseEntity.ok(departmentService.getDepartment(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     // BONUS: opret department (hvis du vil bruge det senere)
@@ -72,6 +100,15 @@ public class Controller {
         return priorityService.getPriorities();
     }
 
+    @GetMapping("/priorities/{id}")
+    public ResponseEntity<?> getPriority(@PathVariable int id){
+        try {
+            return ResponseEntity.ok(priorityService.getPriority(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     // BONUS: opret department (hvis du vil bruge det senere)
     @PostMapping("/priorities/create")
     public ResponseEntity<Priority> createPriority(@RequestBody Priority priority) {
@@ -98,6 +135,7 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 
 }
 
