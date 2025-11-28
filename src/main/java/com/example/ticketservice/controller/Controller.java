@@ -42,10 +42,6 @@ public class Controller {
         Department createdDepartment = departmentService.createDepartment(department);
         return ResponseEntity.ok(createdDepartment);
     }
-
-    @GetMapping("/departments")
-        public List<Department> getDepartments(){
-            return departmentService.getDepartments();
-    }
-
 }
+
+
