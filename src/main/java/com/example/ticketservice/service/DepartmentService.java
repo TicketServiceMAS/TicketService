@@ -36,4 +36,13 @@ public class DepartmentService {
     public Department createDepartment(Department department) {
         return departmentRepository.save(department);
     }
+
+    public Department updateDepartment(int id, Department department){
+        Department departmentToUpdate = departmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Department not found with ID " + id));
+        departmentToUpdate.setDepartmentName(department.getDepartmentName());
+        departmentToUpdate.setMailAddress(department.getMailAddress());
+        return departmentRepository.save(departmentToUpdate);
+    }
+
 }
