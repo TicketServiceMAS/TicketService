@@ -45,4 +45,10 @@ public class DepartmentService {
         return departmentRepository.save(departmentToUpdate);
     }
 
+    public void deleteDepartment(int id){
+        Department departmentToDelete = departmentRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Department not found with ID " + id));
+        departmentRepository.delete(departmentToDelete);
+    }
+
 }
