@@ -90,91 +90,38 @@ public class InitData implements CommandLineRunner {
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
         metricsDepartment.setStatus(Status.SUCCESS);
+        metricsDepartment.setDepartment(department5);
         metricsDepartment.setSubject("12345a Help ERP P2");
         metricsDepartmentRepository.save(metricsDepartment);
 
         MetricsDepartment metricsDepartment1 = new MetricsDepartment();
         metricsDepartment1.setStatus(Status.SUCCESS);
+        metricsDepartment1.setDepartment(department5);
         metricsDepartment1.setSubject("12a HELLO ERP P4");
         metricsDepartmentRepository.save(metricsDepartment1);
 
         MetricsDepartment metricsDepartment2 = new MetricsDepartment();
         metricsDepartment2.setStatus(Status.FAILURE);
+        metricsDepartment2.setDepartment(department5);
         metricsDepartment2.setSubject("12a HELLO ERP P4");
         metricsDepartmentRepository.save(metricsDepartment2);
 
         MetricsDepartment metricsDepartment3 = new MetricsDepartment();
         metricsDepartment3.setStatus(Status.DEFAULTED);
+        metricsDepartment3.setDepartment(department5);
         metricsDepartment3.setSubject("12a HELLO ERP P4");
         metricsDepartmentRepository.save(metricsDepartment3);
 
-        // --- NYT MetricsDepartment Data starter her ---
-        MetricsDepartment md4 = new MetricsDepartment();
-        md4.setStatus(Status.SUCCESS);
-        md4.setSubject("Problem med login på WORKPLACE P1");
-        metricsDepartmentRepository.save(md4);
-
-        MetricsDepartment md5 = new MetricsDepartment();
-        md5.setStatus(Status.FAILURE);
-        md5.setSubject("Kan ikke tilgå CRM systemet P2");
-        metricsDepartmentRepository.save(md5);
-
-        MetricsDepartment md6 = new MetricsDepartment();
-        md6.setStatus(Status.DEFAULTED);
-        md6.setSubject("Spørgsmål til NETWORK konfiguration P3");
-        metricsDepartmentRepository.save(md6);
-
-        MetricsDepartment md7 = new MetricsDepartment();
-        md7.setStatus(Status.SUCCESS);
-        md7.setSubject("Fejl i SECURITY-opdatering P1");
-        metricsDepartmentRepository.save(md7);
-
-        MetricsDepartment md8 = new MetricsDepartment();
-        md8.setStatus(Status.FAILURE);
-        md8.setSubject("SERVICE_DESK_L1 kan ikke løse P2-sag");
-        metricsDepartmentRepository.save(md8);
-
-        MetricsDepartment md9 = new MetricsDepartment();
-        md9.setStatus(Status.SUCCESS);
-        md9.setSubject("WORKPLACE P2 - Ny brugeropsætning");
-        metricsDepartmentRepository.save(md9);
-        // --- NYT MetricsDepartment Data slutter her ---
-
         MetricsPriority metricsPriority = new MetricsPriority();
         metricsPriority.setStatus(Status.SUCCESS);
+        metricsPriority.setPriority(priority1);
         metricsPriority.setSubject("12345a Help ERP P2");
         metricsPriorityRepository.save(metricsPriority);
 
         MetricsPriority metricsPriority1 = new MetricsPriority();
         metricsPriority1.setStatus(Status.SUCCESS);
-        metricsPriority1.setSubject("12a HELLO ERP P4");
+        metricsPriority1.setPriority(priority2);
+        metricsPriority1.setSubject("12a HELLO ERP P3");
         metricsPriorityRepository.save(metricsPriority1);
-
-        // --- NYT MetricsPriority Data starter her ---
-        MetricsPriority mp2 = new MetricsPriority();
-        mp2.setStatus(Status.FAILURE);
-        mp2.setSubject("WORKPLACE P1-issue");
-        metricsPriorityRepository.save(mp2);
-
-        MetricsPriority mp3 = new MetricsPriority();
-        mp3.setStatus(Status.SUCCESS);
-        mp3.setSubject("CRM P3 - opdatering");
-        metricsPriorityRepository.save(mp3);
-
-        MetricsPriority mp4 = new MetricsPriority();
-        mp4.setStatus(Status.DEFAULTED);
-        mp4.setSubject("NETWORK P1 nedbrud");
-        metricsPriorityRepository.save(mp4);
-
-        MetricsPriority mp5 = new MetricsPriority();
-        mp5.setStatus(Status.FAILURE);
-        mp5.setSubject("SERVICE_DESK_L2 SIMA-sag");
-        metricsPriorityRepository.save(mp5);
-
-        MetricsPriority mp6 = new MetricsPriority();
-        mp6.setStatus(Status.SUCCESS);
-        mp6.setSubject("ERP P2 fejlmelding");
-        metricsPriorityRepository.save(mp6);
-        // --- NYT MetricsPriority Data slutter her ---
     }
 }
