@@ -37,11 +37,25 @@ public class Controller {
     }
 
     // BONUS: opret department (hvis du vil bruge det senere)
-    @PostMapping("/department/create")
+    @PostMapping("/departments/create")
     public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
         Department createdDepartment = departmentService.createDepartment(department);
         return ResponseEntity.ok(createdDepartment);
     }
+
+    @PutMapping("/departments/{id}/update")
+    public ResponseEntity<?> updateDepartment(@PathVariable int id, @RequestBody Department department) {
+        try {
+            Department updatedDepartment = departmentService.updateDepartment(id, department);
+            return ResponseEntity.ok(updatedDepartment);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+
+
+    }
+
 }
 
 
