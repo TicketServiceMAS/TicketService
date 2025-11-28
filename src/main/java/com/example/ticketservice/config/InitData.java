@@ -98,6 +98,16 @@ public class InitData implements CommandLineRunner {
         metricsDepartment1.setSubject("12a HELLO ERP P4");
         metricsDepartmentRepository.save(metricsDepartment1);
 
+        MetricsDepartment metricsDepartment2 = new MetricsDepartment();
+        metricsDepartment2.setStatus(Status.FAILURE);
+        metricsDepartment2.setSubject("12a HELLO ERP P4");
+        metricsDepartmentRepository.save(metricsDepartment2);
+
+        MetricsDepartment metricsDepartment3 = new MetricsDepartment();
+        metricsDepartment3.setStatus(Status.DEFAULTED);
+        metricsDepartment3.setSubject("12a HELLO ERP P4");
+        metricsDepartmentRepository.save(metricsDepartment3);
+
         MetricsPriority metricsPriority = new MetricsPriority();
         metricsPriority.setStatus(Status.SUCCESS);
         metricsPriority.setSubject("12345a Help ERP P2");
