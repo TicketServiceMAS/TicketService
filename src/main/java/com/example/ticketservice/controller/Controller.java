@@ -51,11 +51,17 @@ public class Controller {
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-
-
     }
 
+    @DeleteMapping("/departments/{id}/delete")
+    public ResponseEntity<?> deleteDepartment(@PathVariable int id) {
+        try {
+            departmentService.deleteDepartment(id);
+            return ResponseEntity.ok("Department deleted");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
 
 
