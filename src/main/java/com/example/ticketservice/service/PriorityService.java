@@ -31,7 +31,7 @@ public class PriorityService {
         Priority priorityToUpdate = priorityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
         priorityToUpdate.setPriorityName(priority.getPriorityName());
-        return priorityRepository.save(priority);
+        return priorityRepository.save(priorityToUpdate);
     }
 
     public void deletePriority(int id){
