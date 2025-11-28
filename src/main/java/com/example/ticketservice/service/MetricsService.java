@@ -1,7 +1,9 @@
 package com.example.ticketservice.service;
 
 import com.example.ticketservice.dto.RoutingStatsDTO;
+import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.util.Status;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,11 @@ public class MetricsService {
 
     private final MetricsDepartmentRepository metricsDepartmentRepository;
 
-    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository) {
+    private final DepartmentRepository departmentRepository;
+
+    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository, DepartmentRepository departmentRepository) {
         this.metricsDepartmentRepository = metricsDepartmentRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     /**
@@ -50,4 +55,6 @@ public class MetricsService {
                 accuracy
         );
     }
+
+
 }
