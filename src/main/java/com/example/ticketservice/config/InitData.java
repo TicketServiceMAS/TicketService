@@ -112,6 +112,78 @@ public class InitData implements CommandLineRunner {
         metricsDepartment3.setSubject("12a HELLO ERP P4");
         metricsDepartmentRepository.save(metricsDepartment3);
 
+        MetricsDepartment md4 = new MetricsDepartment();
+        md4.setStatus(Status.SUCCESS);
+        md4.setDepartment(department2);
+        md4.setSubject("Problem med login på WORKPLACE P1");
+        metricsDepartmentRepository.save(md4);
+
+        MetricsDepartment md5 = new MetricsDepartment();
+        md5.setStatus(Status.FAILURE);
+        md5.setDepartment(department2);
+        md5.setSubject("WORKPLACE Fejl i printeropsætning P2");
+        metricsDepartmentRepository.save(md5);
+
+        MetricsDepartment md6 = new MetricsDepartment();
+        md6.setStatus(Status.FAILURE);
+        md6.setDepartment(department6);
+        md6.setSubject("Kan ikke tilgå CRM systemet P2");
+        metricsDepartmentRepository.save(md6);
+
+        MetricsDepartment md7 = new MetricsDepartment();
+        md7.setStatus(Status.SUCCESS);
+        md7.setDepartment(department6);
+        md7.setSubject("CRM: Ny brugeroprettelse P3");
+        metricsDepartmentRepository.save(md7);
+
+        MetricsDepartment md8 = new MetricsDepartment();
+        md8.setStatus(Status.DEFAULTED);
+        md8.setDepartment(department3);
+        md8.setSubject("Spørgsmål til NETWORK konfiguration P3");
+        metricsDepartmentRepository.save(md8);
+
+        MetricsDepartment md9 = new MetricsDepartment();
+        md9.setStatus(Status.SUCCESS);
+        md9.setDepartment(department3);
+        md9.setSubject("NETWORK: Langsom forbindelse P1");
+        metricsDepartmentRepository.save(md9);
+
+        MetricsDepartment md10 = new MetricsDepartment();
+        md10.setStatus(Status.SUCCESS);
+        md10.setDepartment(department4);
+        md10.setSubject("Fejl i SECURITY-opdatering P1");
+        metricsDepartmentRepository.save(md10);
+
+        MetricsDepartment md11 = new MetricsDepartment();
+        md11.setStatus(Status.FAILURE);
+        md11.setDepartment(department4);
+        md11.setSubject("SECURITY: Phishing email rapporteret P2");
+        metricsDepartmentRepository.save(md11);
+
+        MetricsDepartment md12 = new MetricsDepartment();
+        md12.setStatus(Status.FAILURE);
+        md12.setDepartment(department);
+        md12.setSubject("SERVICE_DESK_L1 kan ikke løse P2-sag");
+        metricsDepartmentRepository.save(md12);
+
+        MetricsDepartment md13 = new MetricsDepartment();
+        md13.setStatus(Status.SUCCESS);
+        md13.setDepartment(department);
+        md13.setSubject("SD_L1 Standard henvendelse P3");
+        metricsDepartmentRepository.save(md13);
+
+        MetricsDepartment md14 = new MetricsDepartment();
+        md14.setStatus(Status.SUCCESS);
+        md14.setDepartment(department1);
+        md14.setSubject("SD_L2 kompliceret problem P1");
+        metricsDepartmentRepository.save(md14);
+
+        MetricsDepartment md15 = new MetricsDepartment();
+        md15.setStatus(Status.DEFAULTED);
+        md15.setDepartment(department7);
+        md15.setSubject("Manglende afdeling/prioritet test");
+        metricsDepartmentRepository.save(md15);
+
         MetricsPriority metricsPriority = new MetricsPriority();
         metricsPriority.setStatus(Status.SUCCESS);
         metricsPriority.setPriority(priority1);
@@ -123,5 +195,59 @@ public class InitData implements CommandLineRunner {
         metricsPriority1.setPriority(priority2);
         metricsPriority1.setSubject("12a HELLO ERP P3");
         metricsPriorityRepository.save(metricsPriority1);
+
+        MetricsPriority mp2 = new MetricsPriority();
+        mp2.setStatus(Status.FAILURE);
+        mp2.setPriority(priority);
+        mp2.setSubject("WORKPLACE P1-issue kritisk");
+        metricsPriorityRepository.save(mp2);
+
+        MetricsPriority mp3 = new MetricsPriority();
+        mp3.setStatus(Status.DEFAULTED);
+        mp3.setPriority(priority);
+        mp3.setSubject("NETWORK P1 nedbrud");
+        metricsPriorityRepository.save(mp3);
+
+        MetricsPriority mp4 = new MetricsPriority();
+        mp4.setStatus(Status.SUCCESS);
+        mp4.setPriority(priority);
+        mp4.setSubject("SECURITY P1 success");
+        metricsPriorityRepository.save(mp4);
+
+        MetricsPriority mp5 = new MetricsPriority();
+        mp5.setStatus(Status.SUCCESS);
+        mp5.setPriority(priority1);
+        mp5.setSubject("ERP P2 fejlmelding");
+        metricsPriorityRepository.save(mp5);
+
+        MetricsPriority mp6 = new MetricsPriority();
+        mp6.setStatus(Status.FAILURE);
+        mp6.setPriority(priority1);
+        mp6.setSubject("SERVICE_DESK_L1 P2 kræver eskalering");
+        metricsPriorityRepository.save(mp6);
+
+        MetricsPriority mp7 = new MetricsPriority();
+        mp7.setStatus(Status.SUCCESS);
+        mp7.setPriority(priority2);
+        mp7.setSubject("CRM P3 - opdatering");
+        metricsPriorityRepository.save(mp7);
+
+        MetricsPriority mp8 = new MetricsPriority();
+        mp8.setStatus(Status.DEFAULTED);
+        mp8.setPriority(priority2);
+        mp8.setSubject("WORKPLACE P3 spørgsmål");
+        metricsPriorityRepository.save(mp8);
+
+        MetricsPriority mp9 = new MetricsPriority();
+        mp9.setStatus(Status.FAILURE);
+        mp9.setPriority(priority3);
+        mp9.setSubject("SERVICE_DESK_L2 SIMA-sag");
+        metricsPriorityRepository.save(mp9);
+
+        MetricsPriority mp10 = new MetricsPriority();
+        mp10.setStatus(Status.SUCCESS);
+        mp10.setPriority(priority3);
+        mp10.setSubject("SIMA: Løsning implementeret");
+        metricsPriorityRepository.save(mp10);
     }
 }
