@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MetricsDepartmentRepository extends JpaRepository<MetricsDepartment, Integer> {
+import java.util.Optional;
 
     /**
      * Finder alle MetricsDepartment-rækker (tickets) for et givent department.
@@ -20,5 +21,7 @@ public interface MetricsDepartmentRepository extends JpaRepository<MetricsDepart
      *   department.categoryID -> department_CategoryID i metodenavn.
      */
     List<MetricsDepartment> findByDepartment_CategoryID(int categoryID);
+
+    List<MetricsDepartment> findMetricsDepartmentByDepartmentDepartmentID(int id);
 
 }

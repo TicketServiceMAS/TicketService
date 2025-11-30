@@ -5,12 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RoutingStatsDTO {
+public class RoutingStatsPriorityDTO {
 
     private int totalTickets;
     private int successCount;
     private int failureCount;
-    private int defaultedCount;
     private double accuracy;
 
 }

@@ -203,7 +203,7 @@ public class InitData implements CommandLineRunner {
         metricsPriorityRepository.save(mp2);
 
         MetricsPriority mp3 = new MetricsPriority();
-        mp3.setStatus(Status.DEFAULTED);
+        mp3.setStatus(Status.SUCCESS);
         mp3.setPriority(priority);
         mp3.setSubject("NETWORK P1 nedbrud");
         metricsPriorityRepository.save(mp3);
@@ -233,7 +233,7 @@ public class InitData implements CommandLineRunner {
         metricsPriorityRepository.save(mp7);
 
         MetricsPriority mp8 = new MetricsPriority();
-        mp8.setStatus(Status.DEFAULTED);
+        mp8.setStatus(Status.SUCCESS);
         mp8.setPriority(priority2);
         mp8.setSubject("WORKPLACE P3 spørgsmål");
         metricsPriorityRepository.save(mp8);

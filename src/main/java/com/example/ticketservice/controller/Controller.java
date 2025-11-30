@@ -1,7 +1,7 @@
 package com.example.ticketservice.controller;
 
-import com.example.ticketservice.dto.DepartmentDTO;
-import com.example.ticketservice.dto.RoutingStatsDTO;
+import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
+import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.Priority;
@@ -34,12 +34,27 @@ public class Controller {
     // ------------------ STATS ------------------
 
     @GetMapping("/stats")
-    public RoutingStatsDTO getRoutingStats() {
-        return metricsService.getRoutingStats();
+    public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
+        return metricsService.getRoutingStatsDepartments();
     }
 
-    @GetMapping("/stats/departments/{id}")
-    public ResponseEntity<?> getMetricsDepartment(@PathVariable int id) {
+    @GetMapping("/stats/{id}")
+    public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(@PathVariable int id) {
+        return metricsService.getRoutingStatsOneDepartment(id);
+    }
+
+    @GetMapping("/stats/priorities")
+    public RoutingStatsPriorityDTO getRoutingStatsPriorities() {
+        return metricsService.getRoutingStatsPriorities();
+    }
+
+    @GetMapping("/stats/priorities/{id}")
+    public RoutingStatsPriorityDTO getRoutingStatsOnePriority(@PathVariable int id) {
+        return metricsService.getRoutingStatsOnePriority(id);
+    }
+
+    @GetMapping("/metrics/departments/{id}")
+    public ResponseEntity<?> getMetricsDepartment(@PathVariable int id){
         try {
             return ResponseEntity.ok(metricsService.getMetricsDepartment(id));
         } catch (IllegalArgumentException e) {
@@ -49,6 +64,8 @@ public class Controller {
 
     @GetMapping("/stats/priorities/{id}")
     public ResponseEntity<?> getMetricsPriorities(@PathVariable int id) {
+    @GetMapping("/metrics/priorities/{id}")
+    public ResponseEntity<?> getMetricsPriorities(@PathVariable int id){
         try {
             return ResponseEntity.ok(metricsService.getMetricsPriority(id));
         } catch (IllegalArgumentException e) {
