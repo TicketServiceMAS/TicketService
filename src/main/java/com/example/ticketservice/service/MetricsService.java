@@ -1,7 +1,7 @@
 package com.example.ticketservice.service;
 
-import com.example.ticketservice.dto.RoutingStatsDTO;
-import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
+import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.repository.DepartmentRepository;
@@ -10,7 +10,6 @@ import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.Status;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,7 +31,7 @@ public class MetricsService {
      * Beregner routing-statistik baseret på MetricsDepartment-tabellen.
      * Hver række repræsenterer én ticket med et status-felt af typen Status (enum).
      */
-    public RoutingStatsDTO getRoutingStats() {
+    public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
 
         // Hent alle metrics (én per ticket)
         List<MetricsDepartment> all = metricsDepartmentRepository.findAll();
@@ -53,7 +52,7 @@ public class MetricsService {
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsDTO(
+        return new RoutingStatsDepartmentDTO(
                 total,
                 success,
                 failure,
@@ -62,10 +61,36 @@ public class MetricsService {
         );
     }
 
-    public RoutingStatsDTO getMetricsDepartments(int id) {
+    public RoutingStatsPriorityDTO getRoutingStatsPriorities() {
 
         // Hent alle metrics (én per ticket)
-        List<MetricsDepartment> all = metricsDepartmentRepository.findAllById(Collections.singleton(id));
+        List<MetricsPriority> all = metricsPriorityRepository.findAll();
+
+        int total = all.size();
+
+        int success = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.SUCCESS)
+                .count();
+
+        int failure = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.FAILURE)
+                .count();
+
+
+        double accuracy = total > 0 ? (double) success / total : 0.0;
+
+        return new RoutingStatsPriorityDTO(
+                total,
+                success,
+                failure,
+                accuracy
+        );
+    }
+
+    public RoutingStatsPriorityDTO getRoutingStatsOnePriority(int id) {
+
+        // Hent alle metrics (én per ticket)
+        List<MetricsPriority> all = metricsPriorityRepository.findMetricsPriorityByPriority_PriorityID(id);
 
         int total = all.size();
 
@@ -83,7 +108,39 @@ public class MetricsService {
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsDTO(
+        return new RoutingStatsPriorityDTO(
+                total,
+                success,
+                failure,
+                accuracy
+        );
+    }
+
+    public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(int id) {
+
+        // Hent alle metrics (én per ticket)
+        List<MetricsDepartment> all = metricsDepartmentRepository.findMetricsDepartmentByDepartmentDepartmentID(id);
+        for (MetricsDepartment md : all){
+            System.out.println(md.getStatus());
+        }
+
+        int total = all.size();
+
+        int success = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.SUCCESS)
+                .count();
+
+        int failure = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.FAILURE)
+                .count();
+
+        int defaulted = (int) all.stream()
+                .filter(entry -> entry.getStatus() == Status.DEFAULTED)
+                .count();
+
+        double accuracy = total > 0 ? (double) success / total : 0.0;
+
+        return new RoutingStatsDepartmentDTO(
                 total,
                 success,
                 failure,
@@ -91,6 +148,8 @@ public class MetricsService {
                 accuracy
         );
     }
+
+
 
 
 
