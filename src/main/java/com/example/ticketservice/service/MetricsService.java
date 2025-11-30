@@ -1,5 +1,6 @@
 package com.example.ticketservice.service;
 
+import com.example.ticketservice.dto.RoutingStatsDTO;
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.entity.MetricsDepartment;
@@ -16,19 +17,19 @@ import java.util.List;
 public class MetricsService {
 
     private final MetricsDepartmentRepository metricsDepartmentRepository;
-
     private final MetricsPriorityRepository metricsPriorityRepository;
-
     private final DepartmentRepository departmentRepository;
 
-    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository,MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository) {
+    public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository,
+                          MetricsPriorityRepository metricsPriorityRepository,
+                          DepartmentRepository departmentRepository) {
         this.metricsDepartmentRepository = metricsDepartmentRepository;
         this.metricsPriorityRepository = metricsPriorityRepository;
         this.departmentRepository = departmentRepository;
     }
 
     /**
-     * Beregner routing-statistik baseret på MetricsDepartment-tabellen.
+     * Beregner samlet routing-statistik baseret på MetricsDepartment-tabellen.
      * Hver række repræsenterer én ticket med et status-felt af typen Status (enum).
      */
     public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
@@ -61,6 +62,14 @@ public class MetricsService {
         );
     }
 
+    /**
+     * (Bruges evt. hvis du vil have stats for et bestemt metricsDepartment-ID.
+     *  Lader din eksisterende metode stå uændret.)
+     */
+    public RoutingStatsDTO getMetricsDepartments(int id) {
+
+        List<MetricsDepartment> all =
+                metricsDepartmentRepository.findAllById(Collections.singleton(id));
     public RoutingStatsPriorityDTO getRoutingStatsPriorities() {
 
         // Hent alle metrics (én per ticket)
@@ -149,20 +158,41 @@ public class MetricsService {
         );
     }
 
+    /**
+     * Hent et enkelt MetricsDepartment (én ticket/row) ud fra dets ID.
+     */
+    public MetricsDepartment getMetricsDepartment(int id) {
 
 
 
 
     public MetricsDepartment getMetricsDepartment(int id){
         return metricsDepartmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("MetricsDepartment not found with ID " + id));
     }
 
-    public MetricsPriority getMetricsPriority(int id){
+    /**
+     * Hent et enkelt MetricsPriority ud fra ID.
+     */
+    public MetricsPriority getMetricsPriority(int id) {
         return metricsPriorityRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
-
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Priority not found with ID " + id));
     }
 
-
+    /**
+     * NY: Hent ALLE tickets/metrics for et bestemt department.
+     * Bruges af controllerens endpoint:
+     *   GET /api/ticketservice/departments/{id}/tickets
+     *
+     * Forudsætter at MetricsDepartment har en relation:
+     *   private Department department;
+     *   // hvor Department har feltet categoryID
+     * og at MetricsDepartmentRepository har metoden:
+     *   List<MetricsDepartment> findByDepartment_CategoryID(int categoryID);
+     */
+    public List<MetricsDepartment> getTicketsForDepartment(int departmentId) {
+        return metricsDepartmentRepository.findByDepartment_CategoryID(departmentId);
+    }
 }
