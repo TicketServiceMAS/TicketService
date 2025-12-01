@@ -14,6 +14,8 @@ import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketRouter {
 
@@ -21,11 +23,24 @@ public class TicketRouter {
     private DepartmentRepository departmentRepository;
     private PriorityRepository priorityRepository;
 
-    public TicketRouter(DepartmentRepository departmentRepository, PriorityRepository priorityRepository) {
+    private EmailReceiver emailReceiver;
+    private EmailSender emailSender;
+
+    public TicketRouter(DepartmentRepository departmentRepository, PriorityRepository priorityRepository, EmailReceiver emailReceiver, EmailSender emailSender) {
         this.departmentRepository = departmentRepository;
         this.priorityRepository = priorityRepository;
-        // Uses OPENAI_API_KEY (and optionally ORG / PROJECT) from environment
+        this.emailReceiver = emailReceiver;
+        this.emailSender = emailSender;
         this.client = OpenAIOkHttpClient.fromEnv();
+    }
+
+    public void AnalyzeMail(){
+        List<Mail> mails = emailReceiver.receiveMail();
+        for (Mail mail : mails){
+            analyzer(mail);
+            mail.setID();
+            emailSender.sendMail(mail);
+        }
     }
 
     /**
@@ -36,12 +51,16 @@ public class TicketRouter {
 
 
     public  void analyzer(Mail mail) {
-        Department department = departmentRepository.getDepartmentByDepartmentName(routeDepartment(mail.subject, mail.content));
-        Priority priority = priorityRepository.getPriorityByPriorityName(routePriority(mail.subject, mail.content));
+        String departmentName = routeDepartment(mail.subject, mail.content);
+        Department department = departmentRepository.getDepartmentByDepartmentName(departmentName);
+
+
+        String priorityName = routePriority(mail.subject, mail.content);
+        Priority priority = priorityRepository.getPriorityByPriorityName(priorityName);
         mail.setDepartment(department);
         mail.setPriority(priority);
     }
-    public DepartmentName routeDepartment(String subject, String body) {
+    public String routeDepartment(String subject, String body) {
         String prompt = buildPromptDepartment(subject, body);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
@@ -71,10 +90,10 @@ public class TicketRouter {
                 .toUpperCase();
 
         try {
-            return DepartmentName.valueOf(normalized);
+            return normalized;
         } catch (IllegalArgumentException e) {
             System.out.println("Kunne ikke mappe AI-svar '" + raw + "' til Department, sætter UNKNOWN");
-            return DepartmentName.DEFAULT;
+            return "DEFAULTED";
         }
     }
 
@@ -104,7 +123,7 @@ public class TicketRouter {
                 %s
                 """.formatted(subject, body);
     }
-    public PriorityName routePriority(String subject, String body) {
+    public String routePriority(String subject, String body) {
         String prompt = buildPromptPriority(subject, body);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
@@ -134,10 +153,10 @@ public class TicketRouter {
                 .toUpperCase();
 
         try {
-            return PriorityName.valueOf(normalized);
+            return normalized;
         } catch (IllegalArgumentException e) {
             System.out.println("Kunne ikke mappe AI-svar '" + raw + "' til Priority, sætter P3");
-            return PriorityName.P3;
+            return "P3";
         }
     }
 
