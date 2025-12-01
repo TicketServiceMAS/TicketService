@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +27,9 @@ public class MetricsPriority {
 
     @Column(name = "status", nullable = false)
     private Status status;
+
+    @Column(name = "date", nullable = false)
+    private Date date;
 
     @ManyToOne
     @JsonBackReference
