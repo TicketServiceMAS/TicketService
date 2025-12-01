@@ -36,11 +36,12 @@ public class TicketRouter {
 
     public void AnalyzeMail(){
         List<Mail> mails = emailReceiver.receiveMail();
+        if(!mails.isEmpty()){
         for (Mail mail : mails){
             analyzer(mail);
             mail.setID();
             emailSender.sendMail(mail);
-        }
+        }}
     }
 
     /**
