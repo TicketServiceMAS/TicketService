@@ -9,38 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 @SpringBootApplication
+@EnableScheduling
 public class TicketServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TicketServiceApplication.class, args);
     }
-    @Component
-    public class EmailRunner implements CommandLineRunner {
 
-        //private final DepartmentRepository departmentRepository;
-        //private final PriorityRepository priorityRepository;
-        //private final EmailSender emailSender;
+    /*@Component
+    public class EmailScheduler {
+
         private final TicketRouter ticketRouter;
-        //private final EmailReceiver emailReceiver;
 
-        @Autowired// Spring injicerer de nødvendige objekter her
-        public EmailRunner(
-                //DepartmentRepository departmentRepository,
-                //PriorityRepository priorityRepository,
-                //EmailSender emailSender,
-                TicketRouter ticketRouter, EmailReceiver emailReceiver) {
-            //this.departmentRepository = departmentRepository;
-            //this.priorityRepository = priorityRepository;
-            //this.emailSender = emailSender;
+        @Autowired
+        public EmailScheduler(TicketRouter ticketRouter) {
             this.ticketRouter = ticketRouter;
-            //this.emailReceiver = emailReceiver;
         }
-        @Override
-        public void run(String... args) throws Exception {
-        ticketRouter.AnalyzeMail();
-            System.out.println("Analyzing and sending mail");}
-    }
+
+        // Runs every 60 seconds
+        @Scheduled(fixedRate = 60000)
+        public void runEmailAnalyzer() {
+            ticketRouter.AnalyzeMail();
+        }
+    }*/
 }
