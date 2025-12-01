@@ -3,9 +3,11 @@ package com.example.ticketservice.service;
 import java.util.Date;
 import java.util.Properties;
 
+import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.Mail;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.DepartmentName;
@@ -20,9 +22,12 @@ public class EmailSender {
     private MetricsDepartmentRepository metricsDepartmentRepository;
     private MetricsPriorityRepository metricsPriorityRepository;
 
-    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository){
+    private DepartmentRepository departmentRepository;
+
+    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository){
         this.metricsDepartmentRepository = metricsDepartmentRepository;
         this.metricsPriorityRepository = metricsPriorityRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     // Erstat disse med dine egne oplysninger:
@@ -83,14 +88,17 @@ public class EmailSender {
         metricsPriority.setSubject(newSubject);
         metricsPriority.setDate(new Date());
         metricsPriority.setStatus(Status.SUCCESS);
+        metricsPriority.setPriority(mail.getPriority());
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
         metricsDepartment.setSubject(newSubject);
         metricsDepartment.setDate(new Date());
         metricsDepartment.setStatus(Status.SUCCESS);
+        metricsDepartment.setDepartment(mail.getDepartment());
         if (mail.getDepartment().getDepartmentName().equals("DEFAULTED")){
             metricsDepartment.setStatus(Status.DEFAULTED);
         }
+
         metricsDepartmentRepository.save(metricsDepartment);
         metricsPriorityRepository.save(metricsPriority);
 
