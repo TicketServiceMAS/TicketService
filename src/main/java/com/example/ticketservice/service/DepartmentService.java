@@ -39,7 +39,9 @@ public class DepartmentService {
     }
 
     public Department createDepartment(Department department) {
-        return departmentRepository.save(department);
+        if (isValidEmail(department.getMailAddress())){
+        return departmentRepository.save(department);}
+        return null;
     }
 
     public Department updateDepartment(int id, Department department){
@@ -54,6 +56,13 @@ public class DepartmentService {
         Department departmentToDelete = departmentRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Department not found with ID " + id));
         departmentRepository.delete(departmentToDelete);
+    }
+
+    public boolean isValidEmail(String email) {
+        if (email == null) return false;
+
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(regex);
     }
 
 }
