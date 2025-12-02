@@ -1,5 +1,6 @@
 package com.example.ticketservice.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Properties;
 
@@ -86,13 +87,13 @@ public class EmailSender {
     public void createMetrics(String newSubject, Mail mail){
         MetricsPriority metricsPriority = new MetricsPriority();
         metricsPriority.setSubject(newSubject);
-        metricsPriority.setDate(new Date());
+        metricsPriority.setDate(LocalDate.now());
         metricsPriority.setStatus(Status.SUCCESS);
         metricsPriority.setPriority(mail.getPriority());
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
         metricsDepartment.setSubject(newSubject);
-        metricsDepartment.setDate(new Date());
+        metricsDepartment.setDate(LocalDate.now());
         metricsDepartment.setStatus(Status.SUCCESS);
         metricsDepartment.setDepartment(mail.getDepartment());
         if (mail.getDepartment().getDepartmentName().equals("DEFAULTED")){
