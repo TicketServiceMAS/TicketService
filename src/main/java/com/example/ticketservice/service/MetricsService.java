@@ -2,6 +2,7 @@ package com.example.ticketservice.service;
 
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
+import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.repository.DepartmentRepository;
@@ -156,6 +157,12 @@ public class MetricsService {
     public MetricsDepartment getMetricsDepartment(int id){
         return metricsDepartmentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Priority not found with ID " + id));
+    }
+
+    public List<MetricsDepartment> getMetricsDepartmentsForDepartment(int id){
+         Department department = departmentRepository.findById(id)
+                 .orElseThrow(() -> new IllegalArgumentException("Department not found with ID " + id));
+         return department.getMetricsDepartments();
     }
 
     public MetricsPriority getMetricsPriority(int id){

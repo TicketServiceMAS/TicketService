@@ -63,6 +63,15 @@ public class Controller {
         }
     }
 
+    @GetMapping("departments/tickets/{id}")
+    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id){
+        try {
+            return ResponseEntity.ok(metricsService.getMetricsDepartmentsForDepartment(id));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/metrics/priorities/{id}")
     public ResponseEntity<?> getMetricsPriorities(@PathVariable int id){
         try {
