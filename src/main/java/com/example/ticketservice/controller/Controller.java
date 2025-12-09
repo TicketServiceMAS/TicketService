@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -89,6 +90,27 @@ public class Controller {
         }
     }
 
+    // ======================================================
+    // ======= HISTORISK MISROUTING STATISTIK ===============
+    // ======================================================
+
+    @GetMapping("/metrics/misrouting/daily")
+    public ResponseEntity<?> getDailyMisroutingStats(
+            @RequestParam(value = "from", required = false)
+            @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
+            LocalDate from,
+
+            @RequestParam(value = "to", required = false)
+            @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
+            LocalDate to
+    ) {
+        try {
+            return ResponseEntity.ok(metricsService.getDailyMisroutingStats(from, to));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke hente historiske misrouting-data.");
+        }
+    }
 
     // ======================================================
     // =================== DEPARTMENTS ======================
@@ -135,7 +157,6 @@ public class Controller {
         }
     }
 
-
     // ======================================================
     // ==================== PRIORITIES ======================
     // ======================================================
@@ -181,7 +202,6 @@ public class Controller {
         }
     }
 
-
     // ======================================================
     // ===================== TICKETS ========================
     // ======================================================
@@ -189,7 +209,7 @@ public class Controller {
     @PostMapping("/tickets/{id}/misrouted")
     public ResponseEntity<?> markTicketAsMisrouted(@PathVariable long id) {
         try {
-            metricsService.markTicketAsMisrouted(id);  // << backend update logic
+            metricsService.markTicketAsMisrouted(id);  // backend update logic
             return ResponseEntity.ok().build();        // frontend expects no body
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

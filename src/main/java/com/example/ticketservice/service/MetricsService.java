@@ -11,7 +11,10 @@ import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.Status;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MetricsService {
@@ -28,124 +31,68 @@ public class MetricsService {
         this.departmentRepository = departmentRepository;
     }
 
-    /**
-     * Beregner routing-statistik baseret på MetricsDepartment-tabellen.
-     * Hver række repræsenterer én ticket med et status-felt af typen Status (enum).
-     */
+    // ======================================================
+    // ========== ROUTING STATS – DEPARTMENTS ===============
+    // ======================================================
+
     public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
 
-        // Hent alle metrics (én per ticket)
         List<MetricsDepartment> all = metricsDepartmentRepository.findAll();
-
         int total = all.size();
 
-        int success = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.SUCCESS)
-                .count();
-
-        int failure = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.FAILURE)
-                .count();
-
-        int defaulted = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.DEFAULTED)
-                .count();
+        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
+        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
+        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsDepartmentDTO(
-                total,
-                success,
-                failure,
-                defaulted,
-                accuracy
-        );
+        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
+
+    // ======================================================
+    // ========== ROUTING STATS – PRIORITIES ================
+    // ======================================================
 
     public RoutingStatsPriorityDTO getRoutingStatsPriorities() {
 
-        // Hent alle metrics (én per ticket)
         List<MetricsPriority> all = metricsPriorityRepository.findAll();
-
         int total = all.size();
 
-        int success = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.SUCCESS)
-                .count();
-
-        int failure = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.FAILURE)
-                .count();
+        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
+        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsPriorityDTO(
-                total,
-                success,
-                failure,
-                accuracy
-        );
+        return new RoutingStatsPriorityDTO(total, success, failure, accuracy);
     }
 
     public RoutingStatsPriorityDTO getRoutingStatsOnePriority(int id) {
 
-        // Hent alle metrics (én per ticket)
         List<MetricsPriority> all =
                 metricsPriorityRepository.findMetricsPriorityByPriority_PriorityID(id);
 
         int total = all.size();
-
-        int success = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.SUCCESS)
-                .count();
-
-        int failure = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.FAILURE)
-                .count();
-
-        int defaulted = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.DEFAULTED)
-                .count();
+        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
+        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsPriorityDTO(
-                total,
-                success,
-                failure,
-                accuracy
-        );
+        return new RoutingStatsPriorityDTO(total, success, failure, accuracy);
     }
 
     public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(int id) {
 
-        // Hent alle metrics (én per ticket)
         List<MetricsDepartment> all =
                 metricsDepartmentRepository.findMetricsDepartmentByDepartmentDepartmentID(id);
 
         int total = all.size();
-
-        int success = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.SUCCESS)
-                .count();
-
-        int failure = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.FAILURE)
-                .count();
-
-        int defaulted = (int) all.stream()
-                .filter(entry -> entry.getStatus() == Status.DEFAULTED)
-                .count();
+        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
+        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
+        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsDepartmentDTO(
-                total,
-                success,
-                failure,
-                defaulted,
-                accuracy
-        );
+        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
 
     // ======================================================
@@ -168,28 +115,43 @@ public class MetricsService {
     public MetricsPriority getMetricsPriority(int id) {
         return metricsPriorityRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Priority not found with ID " + id));
+                        new IllegalArgumentException("MetricsPriority not found with ID " + id));
     }
 
     // ======================================================
     // ========== MARK TICKET AS MISROUTED (FAILURE) ========
     // ======================================================
 
-    /**
-     * Bruges af POST /api/ticketservice/tickets/{id}/misrouted.
-     * Her antager vi, at {id} er ID'et på MetricsDepartment (én række per ticket).
-     * Vi sætter blot status til FAILURE og gemmer.
-     */
     public void markTicketAsMisrouted(long ticketId) {
-        int idAsInt = (int) ticketId; // repo bruger Integer som ID
 
-        MetricsDepartment metricsDepartment = metricsDepartmentRepository.findById(idAsInt)
+        MetricsDepartment metricsDepartment = metricsDepartmentRepository.findById((int) ticketId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Ticket not found with ID " + ticketId));
 
-        // Marker ticketen som forkert routet
         metricsDepartment.setStatus(Status.FAILURE);
-
         metricsDepartmentRepository.save(metricsDepartment);
+    }
+
+    // ======================================================
+    // ========== DAILY MISROUTING STATS ====================
+    // ======================================================
+
+    /**
+     * Returnerer daglige misrouting-statistikker (antal FAILURE per dag)
+     * mellem datoerne 'from' og 'to' (inklusive).
+     */
+    public Map<LocalDate, Long> getDailyMisroutingStats(LocalDate from, LocalDate to) {
+
+        return metricsDepartmentRepository.findAll().stream()
+                .filter(m -> m.getStatus() == Status.FAILURE)
+                .filter(m -> {
+                    LocalDate d = m.getDate();
+                    return (d.isEqual(from) || d.isAfter(from))
+                            && (d.isEqual(to) || d.isBefore(to));
+                })
+                .collect(Collectors.groupingBy(
+                        MetricsDepartment::getDate,
+                        Collectors.counting()
+                ));
     }
 }

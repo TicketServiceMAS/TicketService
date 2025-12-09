@@ -1,6 +1,5 @@
 package com.example.ticketservice.entity;
 
-import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -37,5 +35,13 @@ public class MetricsDepartment {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-
+    // ======================================================
+    // AUTOMATISK SÆT DATO VED OPRETTELSE
+    // ======================================================
+    @PrePersist
+    public void ensureDateIsSet() {
+        if (this.date == null) {
+            this.date = LocalDate.now();
+        }
+    }
 }
