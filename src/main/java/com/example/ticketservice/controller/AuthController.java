@@ -3,6 +3,7 @@ package com.example.ticketservice.controller;
 import com.example.ticketservice.service.CustomUserDetailsService;
 import com.example.ticketservice.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
+    @Lazy
     private AuthenticationManager authenticationManager;
 
     @Autowired

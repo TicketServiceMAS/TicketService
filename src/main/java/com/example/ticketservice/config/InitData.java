@@ -6,11 +6,14 @@ import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.entity.Priority;
 import com.example.ticketservice.entity.User;
 import com.example.ticketservice.repository.*;
+import com.example.ticketservice.service.UserService;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
 import com.example.ticketservice.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -293,6 +296,13 @@ public class InitData implements CommandLineRunner {
         admin.setPassword("password1234");
         admin.setAdmin(true);
         userRepository.save(admin);
+
+        User testUser = new User();
+        testUser.setUsername("Testuser");
+        testUser.setPassword(new BCryptPasswordEncoder().encode("abc"));
+        testUser.setAdmin(false);
+        userRepository.save(testUser);
+
 
     }
 }
