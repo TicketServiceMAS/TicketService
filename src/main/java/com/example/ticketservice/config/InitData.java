@@ -37,37 +37,37 @@ public class InitData implements CommandLineRunner {
     public void run(String... args) throws Exception{
         Department department = new Department();
         department.setDepartmentName("SERVICE_DESK_L1");
-        department.setMailAddress("masi0001@stud.ek.dk");
+        department.setMailAddress("ServiceDeskL1@proton.me");
         departmentRepository.save(department);
 
         Department department1 = new Department();
         department1.setDepartmentName("SERVICE_DESK_L2");
-        department1.setMailAddress("masi0001@stud.ek.dk");
+        department1.setMailAddress("ServiceDeskL2@proton.me");
         departmentRepository.save(department1);
 
         Department department2 = new Department();
         department2.setDepartmentName("WORKPLACE");
-        department2.setMailAddress("masi0001@stud.ek.dk");
+        department2.setMailAddress("ticketservice.workplace@atomicmail.io");
         departmentRepository.save(department2);
 
         Department department3 = new Department();
         department3.setDepartmentName("NETWORK");
-        department3.setMailAddress("sarahkiilm1310@gmail.com");
+        department3.setMailAddress("ticketservice.network@atomicmail.io");
         departmentRepository.save(department3);
 
         Department department4 = new Department();
         department4.setDepartmentName("SECURITY");
-        department4.setMailAddress("sarahkiilm1310@gmail.com");
+        department4.setMailAddress("ticketservice.security@atomicmail.io");
         departmentRepository.save(department4);
 
         Department department5 = new Department();
         department5.setDepartmentName("ERP");
-        department5.setMailAddress("sarahkiilm1310@gmail.com");
+        department5.setMailAddress("ticketservice.erp@proton.me");
         departmentRepository.save(department5);
 
         Department department6 = new Department();
         department6.setDepartmentName("CRM");
-        department6.setMailAddress("sarahkiilm1310@gmail.com");
+        department6.setMailAddress("ticketservice.crm@atomicmail.io");
         departmentRepository.save(department6);
 
         Department department7 = new Department();
