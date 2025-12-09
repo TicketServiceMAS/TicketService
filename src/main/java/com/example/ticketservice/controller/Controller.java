@@ -68,6 +68,15 @@ public class Controller {
         return metricsService.getAllMetricsDepartments();
     }
 
+    @GetMapping("/metrics/departments/{id}/history")
+    public ResponseEntity<?> getMetricsHistoryForDepartment(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(metricsService.getMetricsHistoryForDepartment(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/metrics/departments/{id}")
     public ResponseEntity<?> getMetricsDepartment(@PathVariable int id) {
         try {
@@ -90,6 +99,15 @@ public class Controller {
     @GetMapping("/metrics/priorities")
     public List<MetricsPriority> getAllMetricsPriorities() {
         return metricsService.getAllMetricsPriorities();
+    }
+
+    @GetMapping("/metrics/priorities/{id}/history")
+    public ResponseEntity<?> getMetricsHistoryForPriority(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(metricsService.getMetricsHistoryForPriority(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/metrics/priorities/{id}")
