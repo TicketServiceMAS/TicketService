@@ -1,5 +1,6 @@
 package com.example.ticketservice.controller;
 
+import com.example.ticketservice.service.CustomUserDetailsService;
 import com.example.ticketservice.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,10 @@ public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @PostMapping("/login")
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
         UsernamePasswordAuthenticationToken token =
@@ -36,7 +40,7 @@ public class AuthController {
                     .body("Invalid username or password");
         }
 
-        UserDetails user = userDetailsService.loadUserByUsername(request.getUsername());
+        UserDetails user = customUserDetailsService.loadUserByUsername(request.getUsername());
         String jwt = jwtService.generateToken(user.getUsername());
 
         return ResponseEntity.ok(jwt);
