@@ -9,6 +9,7 @@ import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.util.Status;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -169,6 +170,24 @@ public class MetricsService {
         return metricsPriorityRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Priority not found with ID " + id));
+    }
+
+    // ======================================================
+    // ============ HISTORICAL DATA FOR INDEX ===============
+    // ======================================================
+
+    /**
+     * Returnerer hele historikken for department-metrics, sorteret efter dato.
+     */
+    public List<MetricsDepartment> getAllMetricsDepartments() {
+        return metricsDepartmentRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+    }
+
+    /**
+     * Returnerer hele historikken for priority-metrics, sorteret efter dato.
+     */
+    public List<MetricsPriority> getAllMetricsPriorities() {
+        return metricsPriorityRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
     // ======================================================

@@ -4,6 +4,8 @@ import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.Priority;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.service.PriorityService;
@@ -61,6 +63,11 @@ public class Controller {
     // ===================== METRICS ========================
     // ======================================================
 
+    @GetMapping("/metrics/departments")
+    public List<MetricsDepartment> getAllMetricsDepartments() {
+        return metricsService.getAllMetricsDepartments();
+    }
+
     @GetMapping("/metrics/departments/{id}")
     public ResponseEntity<?> getMetricsDepartment(@PathVariable int id) {
         try {
@@ -78,6 +85,11 @@ public class Controller {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/metrics/priorities")
+    public List<MetricsPriority> getAllMetricsPriorities() {
+        return metricsService.getAllMetricsPriorities();
     }
 
     @GetMapping("/metrics/priorities/{id}")
