@@ -1,5 +1,6 @@
 package com.example.ticketservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,19 +12,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "priority")
+@Table(name = "users")
 
-public class User1 {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userID;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @Column(name = "isAdmin", nullable = false)
+    private boolean isAdmin;
 }

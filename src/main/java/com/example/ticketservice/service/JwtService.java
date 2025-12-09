@@ -1,7 +1,5 @@
 package com.example.ticketservice.service;
 
-import com.example.ticketservice.entity.User1;
-import com.example.ticketservice.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
