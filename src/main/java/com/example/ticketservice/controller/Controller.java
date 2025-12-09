@@ -7,6 +7,7 @@ import com.example.ticketservice.entity.Priority;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.service.PriorityService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +16,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticketservice")
-@CrossOrigin(origins = "http://localhost:63342") // <- din frontend origin
+@CrossOrigin(origins = "http://localhost:63342") // frontend origin
 public class Controller {
 
     private final MetricsService metricsService;
     private final DepartmentService departmentService;
     private final PriorityService priorityService;
 
-    public Controller(MetricsService metricsService,
-                      DepartmentService departmentService,
-                      PriorityService priorityService) {
+    public Controller(
+            MetricsService metricsService,
+            DepartmentService departmentService,
+            PriorityService priorityService
+    ) {
         this.metricsService = metricsService;
         this.departmentService = departmentService;
         this.priorityService = priorityService;
     }
 
-    // ===== ROUTING STATS =====
+    // ======================================================
+    // ================ ROUTING STATS ========================
+    // ======================================================
 
     @GetMapping("/stats")
     public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
@@ -52,36 +57,42 @@ public class Controller {
         return metricsService.getRoutingStatsOnePriority(id);
     }
 
-    // ===== METRICS =====
+    // ======================================================
+    // ===================== METRICS ========================
+    // ======================================================
 
     @GetMapping("/metrics/departments/{id}")
-    public ResponseEntity<?> getMetricsDepartment(@PathVariable int id){
+    public ResponseEntity<?> getMetricsDepartment(@PathVariable int id) {
         try {
             return ResponseEntity.ok(metricsService.getMetricsDepartment(id));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @GetMapping("departments/tickets/{id}")
-    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id){
+    // Liste af tickets for department (frontend uses this)
+    @GetMapping("/departments/tickets/{id}")
+    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id) {
         try {
             return ResponseEntity.ok(metricsService.getMetricsDepartmentsForDepartment(id));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/metrics/priorities/{id}")
-    public ResponseEntity<?> getMetricsPriorities(@PathVariable int id){
+    public ResponseEntity<?> getMetricsPriorities(@PathVariable int id) {
         try {
             return ResponseEntity.ok(metricsService.getMetricsPriority(id));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    // ===== DEPARTMENTS =====
+
+    // ======================================================
+    // =================== DEPARTMENTS ======================
+    // ======================================================
 
     @GetMapping("/departments")
     public List<Department> getDepartments() {
@@ -89,27 +100,27 @@ public class Controller {
     }
 
     @GetMapping("/departments/{id}")
-    public ResponseEntity<?> getDepartment(@PathVariable int id){
+    public ResponseEntity<?> getDepartment(@PathVariable int id) {
         try {
             return ResponseEntity.ok(departmentService.getDepartment(id));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    // NY: opret department med POST /departments
     @PostMapping("/departments")
     public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
-        Department createdDepartment = departmentService.createDepartment(department);
-        return ResponseEntity.ok(createdDepartment);
+        return ResponseEntity.ok(departmentService.createDepartment(department));
     }
 
     @PutMapping("/departments/{id}")
-    public ResponseEntity<?> updateDepartment(@PathVariable int id, @RequestBody Department department) {
+    public ResponseEntity<?> updateDepartment(
+            @PathVariable int id,
+            @RequestBody Department department
+    ) {
         try {
-            Department updatedDepartment = departmentService.updateDepartment(id, department);
-            return ResponseEntity.ok(updatedDepartment);
-        } catch (IllegalArgumentException e){
+            return ResponseEntity.ok(departmentService.updateDepartment(id, department));
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -124,7 +135,10 @@ public class Controller {
         }
     }
 
-    // ===== PRIORITIES =====
+
+    // ======================================================
+    // ==================== PRIORITIES ======================
+    // ======================================================
 
     @GetMapping("/priorities")
     public List<Priority> getPriorities() {
@@ -132,26 +146,27 @@ public class Controller {
     }
 
     @GetMapping("/priorities/{id}")
-    public ResponseEntity<?> getPriority(@PathVariable int id){
+    public ResponseEntity<?> getPriority(@PathVariable int id) {
         try {
             return ResponseEntity.ok(priorityService.getPriority(id));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PostMapping("/priorities")
     public ResponseEntity<Priority> createPriority(@RequestBody Priority priority) {
-        Priority createdPriority = priorityService.createPriority(priority);
-        return ResponseEntity.ok(createdPriority);
+        return ResponseEntity.ok(priorityService.createPriority(priority));
     }
 
     @PutMapping("/priorities/{id}")
-    public ResponseEntity<?> updatePriority(@PathVariable int id, @RequestBody Priority priority) {
+    public ResponseEntity<?> updatePriority(
+            @PathVariable int id,
+            @RequestBody Priority priority
+    ) {
         try {
-            Priority updatedPriority = priorityService.updatePriority(id, priority);
-            return ResponseEntity.ok(updatedPriority);
-        } catch (IllegalArgumentException e){
+            return ResponseEntity.ok(priorityService.updatePriority(id, priority));
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -163,6 +178,24 @@ public class Controller {
             return ResponseEntity.ok("Priority deleted");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    // ======================================================
+    // ===================== TICKETS ========================
+    // ======================================================
+
+    @PostMapping("/tickets/{id}/misrouted")
+    public ResponseEntity<?> markTicketAsMisrouted(@PathVariable long id) {
+        try {
+            metricsService.markTicketAsMisrouted(id);  // << backend update logic
+            return ResponseEntity.ok().build();        // frontend expects no body
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke markere ticket som forkert routing.");
         }
     }
 }
