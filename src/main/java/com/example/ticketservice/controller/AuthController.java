@@ -25,9 +25,6 @@ public class AuthController {
     private JwtService jwtService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/auth/login")

@@ -30,6 +30,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired PasswordEncoder passwordEncoder;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http
@@ -79,13 +81,9 @@ public class SecurityConfig {
     @Autowired
     public void configure(AuthenticationManagerBuilder auth, @Lazy CustomUserDetailsService customUserDetailsService) throws Exception {
         auth.userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        //return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
-    }
+
 
 }
