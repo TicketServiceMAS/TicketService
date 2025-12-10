@@ -1,7 +1,12 @@
 package com.example.ticketservice.controller;
 
+import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
+import com.example.ticketservice.dto.UserDTO;
+import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.entity.User;
 import com.example.ticketservice.service.CustomUserDetailsService;
 import com.example.ticketservice.service.JwtService;
+import com.example.ticketservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -9,11 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/auth")
 @CrossOrigin(origins = "http://localhost:63342")
 public class AuthController {
 
@@ -27,13 +34,42 @@ public class AuthController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @PostMapping("/auth/login")
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/user/{id}")
+    public UserDTO getUser(@PathVariable int id) {
+        return userService.getUser(id);
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        System.out.println("Username: " +  user.getUsername());
+        System.out.println("Password: " + user.getPassword());
+        System.out.println("Is admin: " + user.isAdmin());
+        System.out.println("Department: " + user.getDepartment());
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable int id,
+            @RequestBody User user
+    ) {
+        try {
+            return ResponseEntity.ok(userService.updateUser(id, user));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+            UsernamePasswordAuthenticationToken token =
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
 
-        authenticationManager.authenticate(token);
+            authenticationManager.authenticate(token);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid username or password");
@@ -43,6 +79,17 @@ public class AuthController {
         String jwt = jwtService.generateToken(user.getUsername());
 
         return ResponseEntity.ok(jwt);
+    }
+
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable int id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("User deleted");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
 
