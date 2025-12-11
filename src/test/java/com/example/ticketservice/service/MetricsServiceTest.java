@@ -61,11 +61,11 @@ class MetricsServiceTest {
 
         RoutingStatsDepartmentDTO result = metricsService.getRoutingStatsDepartments();
 
-        assertThat(result.total()).isEqualTo(3);
-        assertThat(result.success()).isEqualTo(1);
-        assertThat(result.failure()).isEqualTo(1);
-        assertThat(result.defaulted()).isEqualTo(1);
-        assertThat(result.accuracy()).isEqualTo(1.0 / 3.0);
+        assertThat(result.getTotalTickets()).isEqualTo(3);
+        assertThat(result.getSuccessCount()).isEqualTo(1);
+        assertThat(result.getFailureCount()).isEqualTo(1);
+        assertThat(result.getDefaultedCount()).isEqualTo(1);
+        assertThat(result.getAccuracy()).isEqualTo(1.0 / 3.0);
     }
 
     @Test
