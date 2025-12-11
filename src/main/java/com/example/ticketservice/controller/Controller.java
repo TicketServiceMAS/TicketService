@@ -12,6 +12,7 @@ import com.example.ticketservice.service.PriorityService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -161,11 +162,13 @@ public class Controller {
     }
 
     @PostMapping("/departments")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
         return ResponseEntity.ok(departmentService.createDepartment(department));
     }
 
     @PutMapping("/departments/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateDepartment(
             @PathVariable int id,
             @RequestBody Department department
@@ -178,6 +181,7 @@ public class Controller {
     }
 
     @DeleteMapping("/departments/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteDepartment(@PathVariable int id) {
         try {
             departmentService.deleteDepartment(id);
@@ -206,11 +210,13 @@ public class Controller {
     }
 
     @PostMapping("/priorities")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Priority> createPriority(@RequestBody Priority priority) {
         return ResponseEntity.ok(priorityService.createPriority(priority));
     }
 
     @PutMapping("/priorities/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePriority(
             @PathVariable int id,
             @RequestBody Priority priority
@@ -223,6 +229,7 @@ public class Controller {
     }
 
     @DeleteMapping("/priorities/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletePriority(@PathVariable int id) {
         try {
             priorityService.deletePriority(id);
