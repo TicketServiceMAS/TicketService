@@ -4,16 +4,17 @@ import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.entity.Priority;
-import com.example.ticketservice.repository.MetricsDepartmentRepository;
-import com.example.ticketservice.repository.MetricsPriorityRepository;
-import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.entity.User;
+import com.example.ticketservice.repository.*;
+import com.example.ticketservice.service.UserService;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.PriorityName;
 import com.example.ticketservice.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import com.example.ticketservice.repository.DepartmentRepository;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -32,6 +33,9 @@ public class InitData implements CommandLineRunner {
 
     @Autowired
     MetricsPriorityRepository metricsPriorityRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void run(String... args) throws Exception{
@@ -279,5 +283,32 @@ public class InitData implements CommandLineRunner {
         mp10.setDate(LocalDate.of(2025,11,27));
         mp10.setSubject("SIMA: Løsning implementeret");
         metricsPriorityRepository.save(mp10);
+
+        User user = new User();
+        user.setDepartment(department2);
+        user.setUsername("Userboy");
+        user.setPassword("password123");
+        user.setAdmin(false);
+        userRepository.save(user);
+
+        User admin = new User();
+        admin.setUsername("admin");
+        admin.setPassword("password1234");
+        admin.setAdmin(true);
+        userRepository.save(admin);
+
+        User testUser = new User();
+        testUser.setUsername("Testuser");
+        testUser.setPassword(new BCryptPasswordEncoder().encode("abc"));
+        testUser.setAdmin(false);
+        userRepository.save(testUser);
+
+        User testUser1 = new User();
+        testUser1.setUsername("abc");
+        testUser1.setPassword(new BCryptPasswordEncoder().encode("123"));
+        testUser1.setAdmin(false);
+        userRepository.save(testUser1);
+
+
     }
 }

@@ -24,5 +24,7 @@ public class Department {
     private String mailAddress;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MetricsDepartment> metricsDepartments;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> user;
 
 }
