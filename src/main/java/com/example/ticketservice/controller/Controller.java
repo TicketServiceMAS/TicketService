@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticketservice")
-@CrossOrigin(origins = "http://localhost:63342") // frontend origin
+@CrossOrigin// frontend origin
 public class Controller {
 
     private final MetricsService metricsService;
