@@ -67,10 +67,6 @@ public class UserService {
     }
 
     public UserDTO createUser(User user){
-        System.out.println("Username: " +  user.getUsername());
-        System.out.println("Password: " + user.getPassword());
-        System.out.println("Is admin: " + user.isAdmin());
-        System.out.println("Department: " + user.getDepartment());
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userRepository.save(user);

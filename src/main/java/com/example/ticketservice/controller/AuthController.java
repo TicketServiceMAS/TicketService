@@ -44,10 +44,6 @@ public class AuthController {
 
     @PostMapping("/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
-        System.out.println("Username: " +  user.getUsername());
-        System.out.println("Password: " + user.getPassword());
-        System.out.println("Is admin: " + user.isAdmin());
-        System.out.println("Department: " + user.getDepartment());
         return ResponseEntity.ok(userService.createUser(user));
     }
 
