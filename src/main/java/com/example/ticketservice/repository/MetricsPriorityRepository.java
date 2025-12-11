@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface MetricsPriorityRepository extends JpaRepository<MetricsPriority, Integer>{
 
     List<MetricsPriority> findMetricsPriorityByPriority_PriorityID(int id);
+
+    List<MetricsPriority> findByPriority_PriorityIDOrderByDateAsc(int priorityID);
 }
 

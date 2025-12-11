@@ -8,7 +8,9 @@ import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
+import com.example.ticketservice.repository.PriorityRepository;
 import com.example.ticketservice.util.Status;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,13 +24,16 @@ public class MetricsService {
     private final MetricsDepartmentRepository metricsDepartmentRepository;
     private final MetricsPriorityRepository metricsPriorityRepository;
     private final DepartmentRepository departmentRepository;
+    private final PriorityRepository priorityRepository;
 
     public MetricsService(MetricsDepartmentRepository metricsDepartmentRepository,
                           MetricsPriorityRepository metricsPriorityRepository,
-                          DepartmentRepository departmentRepository) {
+                          DepartmentRepository departmentRepository,
+                          PriorityRepository priorityRepository) {
         this.metricsDepartmentRepository = metricsDepartmentRepository;
         this.metricsPriorityRepository = metricsPriorityRepository;
         this.departmentRepository = departmentRepository;
+        this.priorityRepository = priorityRepository;
     }
 
     // ======================================================
@@ -106,16 +111,47 @@ public class MetricsService {
     }
 
     public List<MetricsDepartment> getMetricsDepartmentsForDepartment(int id) {
-        Department department = departmentRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Department not found with ID " + id));
-        return department.getMetricsDepartments();
+        return getMetricsHistoryForDepartment(id);
     }
 
     public MetricsPriority getMetricsPriority(int id) {
         return metricsPriorityRepository.findById(id)
                 .orElseThrow(() ->
                         new IllegalArgumentException("MetricsPriority not found with ID " + id));
+    }
+
+    public List<MetricsDepartment> getMetricsHistoryForDepartment(int departmentId) {
+        departmentRepository.findById(departmentId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Department not found with ID " + departmentId));
+
+        return metricsDepartmentRepository.findByDepartment_DepartmentIDOrderByDateAsc(departmentId);
+    }
+
+    public List<MetricsPriority> getMetricsHistoryForPriority(int priorityId) {
+        priorityRepository.findById(priorityId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Priority not found with ID " + priorityId));
+
+        return metricsPriorityRepository.findByPriority_PriorityIDOrderByDateAsc(priorityId);
+    }
+
+    // ======================================================
+    // ============ HISTORICAL DATA FOR INDEX ===============
+    // ======================================================
+
+    /**
+     * Returnerer hele historikken for department-metrics, sorteret efter dato.
+     */
+    public List<MetricsDepartment> getAllMetricsDepartments() {
+        return metricsDepartmentRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+    }
+
+    /**
+     * Returnerer hele historikken for priority-metrics, sorteret efter dato.
+     */
+    public List<MetricsPriority> getAllMetricsPriorities() {
+        return metricsPriorityRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
     // ======================================================
