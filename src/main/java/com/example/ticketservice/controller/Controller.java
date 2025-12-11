@@ -248,4 +248,19 @@ public class Controller {
                     .body("Kunne ikke markere ticket som forkert routing.");
         }
     }
+    @PostMapping("/tickets/{id}/correct")
+    public ResponseEntity<?> markTicketAsCorrect(@PathVariable int id) {
+        try {
+            metricsService.markTicketAsCorrect(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            // log exception server-side
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke markere ticket som korrekt routing: " + e.getMessage());
+        }
+    }
+
 }
