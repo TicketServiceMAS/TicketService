@@ -190,4 +190,19 @@ public class MetricsService {
                         Collectors.counting()
                 ));
     }
+    public void markTicketAsCorrect(int ticketId) {
+        System.out.println("[MetricsService] markTicketAsCorrect called with id=" + ticketId);
+
+        MetricsDepartment md = metricsDepartmentRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("MetricsDepartment not found with ID " + ticketId));
+
+        System.out.println("[MetricsService] Found MetricsDepartment: " + md.getMetricsDepartmentID() +
+                " subject=" + md.getSubject() + " status=" + md.getStatus());
+
+        md.setStatus(Status.SUCCESS);
+        metricsDepartmentRepository.save(md);
+        System.out.println("[MetricsService] Status updated to SUCCESS for id=" + ticketId);
+    }
+
+
 }
