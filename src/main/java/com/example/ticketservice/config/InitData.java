@@ -303,6 +303,12 @@ public class InitData implements CommandLineRunner {
         testUser.setAdmin(false);
         userRepository.save(testUser);
 
+        User testUser1 = new User();
+        testUser1.setUsername("abc");
+        testUser1.setPassword(new BCryptPasswordEncoder().encode("123"));
+        testUser1.setAdmin(false);
+        userRepository.save(testUser1);
+
 
     }
 }
