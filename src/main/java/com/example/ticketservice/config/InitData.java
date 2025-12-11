@@ -287,13 +287,13 @@ public class InitData implements CommandLineRunner {
         User user = new User();
         user.setDepartment(department2);
         user.setUsername("Userboy");
-        user.setPassword("password123");
+        user.setPassword(new BCryptPasswordEncoder().encode("password123"));
         user.setAdmin(false);
         userRepository.save(user);
 
         User admin = new User();
         admin.setUsername("admin");
-        admin.setPassword("password1234");
+        admin.setPassword(new BCryptPasswordEncoder().encode("admin123"));
         admin.setAdmin(true);
         userRepository.save(admin);
 
