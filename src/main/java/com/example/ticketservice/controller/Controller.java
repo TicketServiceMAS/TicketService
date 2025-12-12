@@ -2,10 +2,7 @@ package com.example.ticketservice.controller;
 
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
-import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.entity.Priority;
-import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.*;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.service.PriorityService;
@@ -13,7 +10,9 @@ import com.example.ticketservice.service.PriorityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -90,8 +89,15 @@ public class Controller {
 
     // Liste af tickets for department (frontend uses this)
     @GetMapping("/departments/tickets/{id}")
-    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id) {
+    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
         try {
+            if (!user.isAdmin()){
+                if (user.getDepartment().getDepartmentID() != id) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                            "You cannot access metrics for another department.");
+                }
+            }
             return ResponseEntity.ok(metricsService.getMetricsDepartmentsForDepartment(id));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
