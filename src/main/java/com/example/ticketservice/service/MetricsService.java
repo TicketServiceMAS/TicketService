@@ -5,6 +5,7 @@ import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.Priority;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
@@ -54,6 +55,21 @@ public class MetricsService {
         return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
 
+    public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(int id) {
+
+        List<MetricsDepartment> all =
+                metricsDepartmentRepository.findMetricsDepartmentByDepartmentDepartmentID(id);
+
+        int total = all.size();
+        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
+        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
+        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
+
+        double accuracy = total > 0 ? (double) success / total : 0.0;
+
+        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
+    }
+
     // ======================================================
     // ========== ROUTING STATS – PRIORITIES ================
     // ======================================================
@@ -83,21 +99,6 @@ public class MetricsService {
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
         return new RoutingStatsPriorityDTO(total, success, failure, accuracy);
-    }
-
-    public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(int id) {
-
-        List<MetricsDepartment> all =
-                metricsDepartmentRepository.findMetricsDepartmentByDepartmentDepartmentID(id);
-
-        int total = all.size();
-        int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
-        int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
-        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
-
-        double accuracy = total > 0 ? (double) success / total : 0.0;
-
-        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
 
     // ======================================================
@@ -140,16 +141,10 @@ public class MetricsService {
     // ============ HISTORICAL DATA FOR INDEX ===============
     // ======================================================
 
-    /**
-     * Returnerer hele historikken for department-metrics, sorteret efter dato.
-     */
     public List<MetricsDepartment> getAllMetricsDepartments() {
         return metricsDepartmentRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
-    /**
-     * Returnerer hele historikken for priority-metrics, sorteret efter dato.
-     */
     public List<MetricsPriority> getAllMetricsPriorities() {
         return metricsPriorityRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
@@ -169,13 +164,42 @@ public class MetricsService {
     }
 
     // ======================================================
+    // ========== MARK TICKET AS CORRECT (SUCCESS) ==========
+    // ======================================================
+
+    public void markTicketAsCorrect(int ticketId) {
+
+        MetricsDepartment md = metricsDepartmentRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("MetricsDepartment not found with ID " + ticketId));
+
+        md.setStatus(Status.SUCCESS);
+        metricsDepartmentRepository.save(md);
+    }
+
+    // ======================================================
+    // ========== UPDATE TICKET PRIORITY (ADMIN ONLY) =========
+    // ======================================================
+
+    public void updateTicketPriority(int ticketId, int priorityId) {
+
+        MetricsDepartment ticket = metricsDepartmentRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Ticket not found with ID " + ticketId));
+
+        Priority priority = priorityRepository.findById(priorityId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Priority not found with ID " + priorityId));
+
+        ticket.setPriority(priority);
+
+        metricsDepartmentRepository.save(ticket);
+    }
+
+    // ======================================================
     // ========== DAILY MISROUTING STATS ====================
     // ======================================================
 
-    /**
-     * Returnerer daglige misrouting-statistikker (antal FAILURE per dag)
-     * mellem datoerne 'from' og 'to' (inklusive).
-     */
     public Map<LocalDate, Long> getDailyMisroutingStats(LocalDate from, LocalDate to) {
 
         return metricsDepartmentRepository.findAll().stream()
@@ -190,19 +214,4 @@ public class MetricsService {
                         Collectors.counting()
                 ));
     }
-    public void markTicketAsCorrect(int ticketId) {
-        System.out.println("[MetricsService] markTicketAsCorrect called with id=" + ticketId);
-
-        MetricsDepartment md = metricsDepartmentRepository.findById(ticketId)
-                .orElseThrow(() -> new IllegalArgumentException("MetricsDepartment not found with ID " + ticketId));
-
-        System.out.println("[MetricsService] Found MetricsDepartment: " + md.getMetricsDepartmentID() +
-                " subject=" + md.getSubject() + " status=" + md.getStatus());
-
-        md.setStatus(Status.SUCCESS);
-        metricsDepartmentRepository.save(md);
-        System.out.println("[MetricsService] Status updated to SUCCESS for id=" + ticketId);
-    }
-
-
 }
