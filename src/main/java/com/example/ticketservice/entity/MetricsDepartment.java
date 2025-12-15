@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "metrics_department")
 public class MetricsDepartment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int metricsDepartmentID;
@@ -35,9 +36,14 @@ public class MetricsDepartment {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    // ======================================================
-    // AUTOMATISK SÆT DATO VED OPRETTELSE
-    // ======================================================
+    // ⭐ NYT FELT – PRIORITET
+    @ManyToOne
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
+
+    // ============================
+    // AUTO-SÆT DATO VED OPRETTELSE
+    // ============================
     @PrePersist
     public void ensureDateIsSet() {
         if (this.date == null) {
