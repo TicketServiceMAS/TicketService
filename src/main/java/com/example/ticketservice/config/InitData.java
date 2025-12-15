@@ -1,10 +1,6 @@
 package com.example.ticketservice.config;
 
-import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.entity.MetricsPriority;
-import com.example.ticketservice.entity.Priority;
-import com.example.ticketservice.entity.User;
+import com.example.ticketservice.entity.*;
 import com.example.ticketservice.repository.*;
 import com.example.ticketservice.service.UserService;
 import com.example.ticketservice.util.DepartmentName;
@@ -35,7 +31,12 @@ public class InitData implements CommandLineRunner {
     MetricsPriorityRepository metricsPriorityRepository;
 
     @Autowired
+    MetricsRepository metricsRepository;
+
+    @Autowired
     UserRepository userRepository;
+
+
 
     @Override
     public void run(String... args) throws Exception{
@@ -95,194 +96,143 @@ public class InitData implements CommandLineRunner {
         priority3.setPriorityName("SIMA");
         priorityRepository.save(priority3);
 
-        MetricsDepartment metricsDepartment = new MetricsDepartment();
-        metricsDepartment.setStatus(Status.SUCCESS);
-        metricsDepartment.setDepartment(department5);
-        metricsDepartment.setDate(LocalDate.of(2025,11,15));
-        metricsDepartment.setSubject("12345a Help ERP P2");
-        metricsDepartmentRepository.save(metricsDepartment);
+        // L1 – P3
 
-        MetricsDepartment metricsDepartment1 = new MetricsDepartment();
-        metricsDepartment1.setStatus(Status.SUCCESS);
-        metricsDepartment1.setDepartment(department5);
-        metricsDepartment1.setDate(LocalDate.of(2025,11,17));
-        metricsDepartment1.setSubject("12a HELLO ERP P4");
-        metricsDepartmentRepository.save(metricsDepartment1);
 
-        MetricsDepartment metricsDepartment2 = new MetricsDepartment();
-        metricsDepartment2.setStatus(Status.FAILURE);
-        metricsDepartment2.setDepartment(department5);
-        metricsDepartment2.setDate(LocalDate.of(2025,11,18));
-        metricsDepartment2.setSubject("12a HELLO ERP P4");
-        metricsDepartmentRepository.save(metricsDepartment2);
+        Metrics mL1P3 = new Metrics();
+        mL1P3.setSubject("INC-40001 L1 password reset P3");
+        mL1P3.setDate(LocalDate.of(2025, 11, 1));
 
-        MetricsDepartment metricsDepartment3 = new MetricsDepartment();
-        metricsDepartment3.setStatus(Status.DEFAULTED);
-        metricsDepartment3.setDepartment(department5);
-        metricsDepartment3.setDate(LocalDate.of(2025,11,22));
-        metricsDepartment3.setSubject("12a HELLO ERP P4");
-        metricsDepartmentRepository.save(metricsDepartment3);
+        MetricsDepartment mdL1P3 = new MetricsDepartment();
+        mdL1P3.setStatus(Status.DEFAULTED);
+        mdL1P3.setDepartment(department);
 
-        MetricsDepartment md4 = new MetricsDepartment();
-        md4.setStatus(Status.SUCCESS);
-        md4.setDepartment(department2);
-        md4.setDate(LocalDate.of(2025,11,13));
-        md4.setSubject("Problem med login på WORKPLACE P1");
-        metricsDepartmentRepository.save(md4);
+        MetricsPriority mpL1P3 = new MetricsPriority();
+        mpL1P3.setStatus(Status.SUCCESS);
+        mpL1P3.setPriority(priority2);
 
-        MetricsDepartment md5 = new MetricsDepartment();
-        md5.setStatus(Status.FAILURE);
-        md5.setDepartment(department2);
-        md5.setDate(LocalDate.of(2025,11,24));
-        md5.setSubject("WORKPLACE Fejl i printeropsætning P2");
-        metricsDepartmentRepository.save(md5);
+        mL1P3.setMetricsDepartment(mdL1P3);
+        mL1P3.setMetricsPriority(mpL1P3);
 
-        MetricsDepartment md6 = new MetricsDepartment();
-        md6.setStatus(Status.FAILURE);
-        md6.setDepartment(department6);
-        md6.setDate(LocalDate.of(2025,11,25));
-        md6.setSubject("Kan ikke tilgå CRM systemet P2");
-        metricsDepartmentRepository.save(md6);
+        metricsRepository.save(mL1P3);
 
-        MetricsDepartment md7 = new MetricsDepartment();
-        md7.setStatus(Status.SUCCESS);
-        md7.setDepartment(department6);
-        md7.setDate(LocalDate.of(2025,11,25));
-        md7.setSubject("CRM: Ny brugeroprettelse P3");
-        metricsDepartmentRepository.save(md7);
 
-        MetricsDepartment md8 = new MetricsDepartment();
-        md8.setStatus(Status.DEFAULTED);
-        md8.setDepartment(department3);
-        md8.setDate(LocalDate.of(2025,11,26));
-        md8.setSubject("Spørgsmål til NETWORK konfiguration P3");
-        metricsDepartmentRepository.save(md8);
+        Metrics mL1P2 = new Metrics();
+        mL1P2.setSubject("INC-40002 L1 account unlock P2");
+        mL1P2.setDate(LocalDate.of(2025, 11, 2));
 
-        MetricsDepartment md9 = new MetricsDepartment();
-        md9.setStatus(Status.SUCCESS);
-        md9.setDepartment(department3);
-        md9.setDate(LocalDate.of(2025,11,27));
-        md9.setSubject("NETWORK: Langsom forbindelse P1");
-        metricsDepartmentRepository.save(md9);
+        MetricsDepartment mdL1P2 = new MetricsDepartment();
+        mdL1P2.setStatus(Status.FAILURE);
+        mdL1P2.setDepartment(department);
 
-        MetricsDepartment md10 = new MetricsDepartment();
-        md10.setStatus(Status.SUCCESS);
-        md10.setDepartment(department4);
-        md10.setDate(LocalDate.of(2025,11,27));
-        md10.setSubject("Fejl i SECURITY-opdatering P1");
-        metricsDepartmentRepository.save(md10);
+        MetricsPriority mpL1P2 = new MetricsPriority();
+        mpL1P2.setStatus(Status.SUCCESS);
+        mpL1P2.setPriority(priority1);
 
-        MetricsDepartment md11 = new MetricsDepartment();
-        md11.setStatus(Status.FAILURE);
-        md11.setDepartment(department4);
-        md11.setDate(LocalDate.of(2025,11,28));
-        md11.setSubject("SECURITY: Phishing email rapporteret P2");
-        metricsDepartmentRepository.save(md11);
+        mL1P2.setMetricsDepartment(mdL1P2);
+        mL1P2.setMetricsPriority(mpL1P2);
 
-        MetricsDepartment md12 = new MetricsDepartment();
-        md12.setStatus(Status.FAILURE);
-        md12.setDepartment(department);
-        md12.setDate(LocalDate.of(2025,11,28));
-        md12.setSubject("SERVICE_DESK_L1 kan ikke løse P2-sag");
-        metricsDepartmentRepository.save(md12);
+        metricsRepository.save(mL1P2);
 
-        MetricsDepartment md13 = new MetricsDepartment();
-        md13.setStatus(Status.SUCCESS);
-        md13.setDepartment(department);
-        md13.setDate(LocalDate.of(2025,11,29));
-        md13.setSubject("SD_L1 Standard henvendelse P3");
-        metricsDepartmentRepository.save(md13);
+        Metrics mL2P2 = new Metrics();
+        mL2P2.setSubject("INC-40003 L2 escalation P2");
+        mL2P2.setDate(LocalDate.of(2025, 11, 3));
 
-        MetricsDepartment md14 = new MetricsDepartment();
-        md14.setStatus(Status.SUCCESS);
-        md14.setDepartment(department1);
-        md14.setDate(LocalDate.of(2025,11,30));
-        md14.setSubject("SD_L2 kompliceret problem P1");
-        metricsDepartmentRepository.save(md14);
+        MetricsDepartment mdL2P2 = new MetricsDepartment();
+        mdL2P2.setStatus(Status.DEFAULTED);
+        mdL2P2.setDepartment(department1);
 
-        MetricsDepartment md15 = new MetricsDepartment();
-        md15.setStatus(Status.DEFAULTED);
-        md15.setDepartment(department7);
-        md15.setDate(LocalDate.of(2025,12,1));
-        md15.setSubject("Manglende afdeling/prioritet test");
-        metricsDepartmentRepository.save(md15);
+        MetricsPriority mpL2P2 = new MetricsPriority();
+        mpL2P2.setStatus(Status.SUCCESS);
+        mpL2P2.setPriority(priority1);
 
-        MetricsPriority metricsPriority = new MetricsPriority();
-        metricsPriority.setStatus(Status.SUCCESS);
-        metricsPriority.setPriority(priority1);
-        metricsPriority.setDate(LocalDate.of(2025,11,13));
-        metricsPriority.setSubject("12345a Help ERP P2");
-        metricsPriorityRepository.save(metricsPriority);
+        mL2P2.setMetricsDepartment(mdL2P2);
+        mL2P2.setMetricsPriority(mpL2P2);
 
-        MetricsPriority metricsPriority1 = new MetricsPriority();
-        metricsPriority1.setStatus(Status.SUCCESS);
-        metricsPriority1.setPriority(priority2);
-        metricsPriority1.setDate(LocalDate.of(2025,11,15));
-        metricsPriority1.setSubject("12a HELLO ERP P3");
-        metricsPriorityRepository.save(metricsPriority1);
+        metricsRepository.save(mL2P2);
 
-        MetricsPriority mp2 = new MetricsPriority();
-        mp2.setStatus(Status.FAILURE);
-        mp2.setPriority(priority);
-        mp2.setDate(LocalDate.of(2025,11,14));
-        mp2.setSubject("WORKPLACE P1-issue kritisk");
-        metricsPriorityRepository.save(mp2);
+        Metrics mL2P1 = new Metrics();
+        mL2P1.setSubject("INC-40004 L2 outage P1");
+        mL2P1.setDate(LocalDate.of(2025, 11, 4));
 
-        MetricsPriority mp3 = new MetricsPriority();
-        mp3.setStatus(Status.SUCCESS);
-        mp3.setPriority(priority);
-        mp3.setDate(LocalDate.of(2025,11,16));
-        mp3.setSubject("NETWORK P1 nedbrud");
-        metricsPriorityRepository.save(mp3);
+        MetricsDepartment mdL2P1 = new MetricsDepartment();
+        mdL2P1.setStatus(Status.SUCCESS);
+        mdL2P1.setDepartment(department1);
 
-        MetricsPriority mp4 = new MetricsPriority();
-        mp4.setStatus(Status.SUCCESS);
-        mp4.setPriority(priority);
-        mp4.setDate(LocalDate.of(2025,11,17));
-        mp4.setSubject("SECURITY P1 success");
-        metricsPriorityRepository.save(mp4);
+        MetricsPriority mpL2P1 = new MetricsPriority();
+        mpL2P1.setStatus(Status.SUCCESS);
+        mpL2P1.setPriority(priority);
 
-        MetricsPriority mp5 = new MetricsPriority();
-        mp5.setStatus(Status.SUCCESS);
-        mp5.setPriority(priority1);
-        mp5.setDate(LocalDate.of(2025,11,17));
-        mp5.setSubject("ERP P2 fejlmelding");
-        metricsPriorityRepository.save(mp5);
+        mL2P1.setMetricsDepartment(mdL2P1);
+        mL2P1.setMetricsPriority(mpL2P1);
 
-        MetricsPriority mp6 = new MetricsPriority();
-        mp6.setStatus(Status.FAILURE);
-        mp6.setPriority(priority1);
-        mp6.setDate(LocalDate.of(2025,11,18));
-        mp6.setSubject("SERVICE_DESK_L1 P2 kræver eskalering");
-        metricsPriorityRepository.save(mp6);
+        metricsRepository.save(mL2P1);
+        Metrics mWpP3 = new Metrics();
+        mWpP3.setSubject("INC-40005 Workplace onboarding P3");
+        mWpP3.setDate(LocalDate.of(2025, 11, 5));
 
-        MetricsPriority mp7 = new MetricsPriority();
-        mp7.setStatus(Status.SUCCESS);
-        mp7.setPriority(priority2);
-        mp7.setDate(LocalDate.of(2025,11,20));
-        mp7.setSubject("CRM P3 - opdatering");
-        metricsPriorityRepository.save(mp7);
+        MetricsDepartment mdWpP3 = new MetricsDepartment();
+        mdWpP3.setStatus(Status.SUCCESS);
+        mdWpP3.setDepartment(department2);
 
-        MetricsPriority mp8 = new MetricsPriority();
-        mp8.setStatus(Status.SUCCESS);
-        mp8.setPriority(priority2);
-        mp8.setDate(LocalDate.of(2025,11,25));
-        mp8.setSubject("WORKPLACE P3 spørgsmål");
-        metricsPriorityRepository.save(mp8);
+        MetricsPriority mpWpP3 = new MetricsPriority();
+        mpWpP3.setStatus(Status.SUCCESS);
+        mpWpP3.setPriority(priority2);
 
-        MetricsPriority mp9 = new MetricsPriority();
-        mp9.setStatus(Status.FAILURE);
-        mp9.setPriority(priority3);
-        mp9.setDate(LocalDate.of(2025,11,26));
-        mp9.setSubject("SERVICE_DESK_L2 SIMA-sag");
-        metricsPriorityRepository.save(mp9);
+        mWpP3.setMetricsDepartment(mdWpP3);
+        mWpP3.setMetricsPriority(mpWpP3);
 
-        MetricsPriority mp10 = new MetricsPriority();
-        mp10.setStatus(Status.SUCCESS);
-        mp10.setPriority(priority3);
-        mp10.setDate(LocalDate.of(2025,11,27));
-        mp10.setSubject("SIMA: Løsning implementeret");
-        metricsPriorityRepository.save(mp10);
+        metricsRepository.save(mWpP3);
+        Metrics mWpP2 = new Metrics();
+        mWpP2.setSubject("INC-40006 Workplace hardware P2");
+        mWpP2.setDate(LocalDate.of(2025, 11, 6));
+
+        MetricsDepartment mdWpP2 = new MetricsDepartment();
+        mdWpP2.setStatus(Status.SUCCESS);
+        mdWpP2.setDepartment(department2);
+
+        MetricsPriority mpWpP2 = new MetricsPriority();
+        mpWpP2.setStatus(Status.SUCCESS);
+        mpWpP2.setPriority(priority1);
+
+        mWpP2.setMetricsDepartment(mdWpP2);
+        mWpP2.setMetricsPriority(mpWpP2);
+
+        metricsRepository.save(mWpP2);
+        Metrics mNetP1 = new Metrics();
+        mNetP1.setSubject("INC-40007 Network outage P1");
+        mNetP1.setDate(LocalDate.of(2025, 11, 7));
+
+        MetricsDepartment mdNetP1 = new MetricsDepartment();
+        mdNetP1.setStatus(Status.SUCCESS);
+        mdNetP1.setDepartment(department3);
+
+        MetricsPriority mpNetP1 = new MetricsPriority();
+        mpNetP1.setStatus(Status.SUCCESS);
+        mpNetP1.setPriority(priority);
+
+        mNetP1.setMetricsDepartment(mdNetP1);
+        mNetP1.setMetricsPriority(mpNetP1);
+
+        metricsRepository.save(mNetP1);
+        Metrics mNetP3 = new Metrics();
+        mNetP3.setSubject("INC-40008 Network maintenance P3");
+        mNetP3.setDate(LocalDate.of(2025, 11, 8));
+
+        MetricsDepartment mdNetP3 = new MetricsDepartment();
+        mdNetP3.setStatus(Status.SUCCESS);
+        mdNetP3.setDepartment(department3);
+
+        MetricsPriority mpNetP3 = new MetricsPriority();
+        mpNetP3.setStatus(Status.SUCCESS);
+        mpNetP3.setPriority(priority2);
+
+        mNetP3.setMetricsDepartment(mdNetP3);
+        mNetP3.setMetricsPriority(mpNetP3);
+
+        metricsRepository.save(mNetP3);
+
+
 
         User user = new User();
         user.setDepartment(department2);
@@ -305,7 +255,7 @@ public class InitData implements CommandLineRunner {
 
         User testUser1 = new User();
         testUser1.setUsername("abc");
-        testUser1.setDepartment(department6);
+        testUser1.setDepartment(department1);
         testUser1.setPassword(new BCryptPasswordEncoder().encode("123"));
         testUser1.setAdmin(false);
         userRepository.save(testUser1);

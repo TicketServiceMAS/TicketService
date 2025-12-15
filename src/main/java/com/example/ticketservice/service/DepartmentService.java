@@ -12,8 +12,11 @@ import java.util.List;
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
-    public DepartmentService (DepartmentRepository departmentRepository){
+    private final MetricsDepartmentRepository metricsDepartmentRepository;
+
+    public DepartmentService (DepartmentRepository departmentRepository, MetricsDepartmentRepository metricsDepartmentRepository){
         this.departmentRepository = departmentRepository;
+        this.metricsDepartmentRepository = metricsDepartmentRepository;
     }
 
     public Department createDepartment(DepartmentDTO departmentDTO){

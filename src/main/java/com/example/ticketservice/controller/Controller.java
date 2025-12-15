@@ -1,7 +1,9 @@
 package com.example.ticketservice.controller;
 
+import com.example.ticketservice.dto.DepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
+import com.example.ticketservice.dto.TicketDTO;
 import com.example.ticketservice.entity.*;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
@@ -65,8 +67,8 @@ public class Controller {
     // ======================================================
 
     @GetMapping("/metrics/departments")
-    public List<MetricsDepartment> getAllMetricsDepartments() {
-        return metricsService.getAllMetricsDepartments();
+    public List<TicketDTO> getAllMetricsDepartments() {
+        return metricsService.getAllTickets();
     }
 
     @GetMapping("/metrics/departments/{id}/history")
@@ -142,7 +144,7 @@ public class Controller {
             LocalDate to
     ) {
         try {
-            return ResponseEntity.ok(metricsService.getDailyMisroutingStats(from, to));
+            return ResponseEntity.ok(metricsService.getDailyMisroutingStatsDepartment(from, to));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke hente historiske misrouting-data.");
@@ -169,7 +171,10 @@ public class Controller {
 
     @PostMapping("/departments")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
+    public ResponseEntity<Department> createDepartment(@RequestBody DepartmentDTO dto) {
+        Department department = new Department();
+        department.setDepartmentName(dto.getDepartmentName());
+        department.setMailAddress(dto.getMailAddress());
         return ResponseEntity.ok(departmentService.createDepartment(department));
     }
 
@@ -177,8 +182,12 @@ public class Controller {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateDepartment(
             @PathVariable int id,
-            @RequestBody Department department
-    ) {
+            @RequestBody DepartmentDTO dto
+    )
+    {
+        Department department = new Department();
+        department.setDepartmentName(dto.getDepartmentName());
+        department.setMailAddress(dto.getMailAddress());
         try {
             return ResponseEntity.ok(departmentService.updateDepartment(id, department));
         } catch (IllegalArgumentException e) {
@@ -250,9 +259,9 @@ public class Controller {
     // ======================================================
 
     @PostMapping("/tickets/{id}/misrouted")
-    public ResponseEntity<?> markTicketAsMisrouted(@PathVariable long id) {
+    public ResponseEntity<?> markTicketAsMisrouted(@PathVariable int id) {
         try {
-            metricsService.markTicketAsMisrouted(id);  // backend update logic
+            metricsService.markTicketDepartmentAsMisrouted(id);  // backend update logic
             return ResponseEntity.ok().build();        // frontend expects no body
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -264,7 +273,7 @@ public class Controller {
     @PostMapping("/tickets/{id}/correct")
     public ResponseEntity<?> markTicketAsCorrect(@PathVariable int id) {
         try {
-            metricsService.markTicketAsCorrect(id);
+            metricsService.markTicketDepartmentAsCorrect(id);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
