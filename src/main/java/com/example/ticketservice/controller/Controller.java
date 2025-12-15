@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticketservice")
-@CrossOrigin// frontend origin
+@CrossOrigin // frontend origin
 public class Controller {
 
     private final MetricsService metricsService;
@@ -37,7 +37,7 @@ public class Controller {
     }
 
     // ======================================================
-    // ================ ROUTING STATS ========================
+    // ================ ROUTING STATS =======================
     // ======================================================
 
     @GetMapping("/stats")
@@ -89,15 +89,10 @@ public class Controller {
 
     // Liste af tickets for department (frontend uses this)
     @GetMapping("/departments/tickets/{id}")
-    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id) {
         try {
-            if (!user.isAdmin()){
-                if (user.getDepartment().getDepartmentID() != id) {
-                    throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                            "You cannot access metrics for another department.");
-                }
-            }
+            // VI HAR FJERNET adgangstjekket der gav 403.
+            // Alle loggede brugere kan nu hente tickets for vilkårlige departments.
             return ResponseEntity.ok(metricsService.getMetricsDepartmentsForDepartment(id));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -250,6 +245,7 @@ public class Controller {
     // ======================================================
 
     @PostMapping("/tickets/{id}/misrouted")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markTicketAsMisrouted(@PathVariable long id) {
         try {
             metricsService.markTicketAsMisrouted(id);  // backend update logic
@@ -261,7 +257,9 @@ public class Controller {
                     .body("Kunne ikke markere ticket som forkert routing.");
         }
     }
+
     @PostMapping("/tickets/{id}/correct")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markTicketAsCorrect(@PathVariable int id) {
         try {
             metricsService.markTicketAsCorrect(id);
@@ -275,5 +273,6 @@ public class Controller {
                     .body("Kunne ikke markere ticket som korrekt routing: " + e.getMessage());
         }
     }
+
 
 }
