@@ -12,14 +12,16 @@ import com.example.ticketservice.service.PriorityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticketservice")
-@CrossOrigin // frontend origin
+@CrossOrigin// frontend origin
 public class Controller {
 
     private final MetricsService metricsService;
@@ -37,7 +39,7 @@ public class Controller {
     }
 
     // ======================================================
-    // ROUTING STATS
+    // ================ ROUTING STATS ========================
     // ======================================================
 
     @GetMapping("/stats")
@@ -61,7 +63,7 @@ public class Controller {
     }
 
     // ======================================================
-    // METRICS
+    // ===================== METRICS ========================
     // ======================================================
 
     @GetMapping("/metrics/departments")
@@ -87,13 +89,17 @@ public class Controller {
         }
     }
 
-    //
-    // LISTE AF TICKETS TIL ET DEPARTMENT
-    // (user må gerne se andre departments → ingen 403 mere)
-    //
+    // Liste af tickets for department (frontend uses this)
     @GetMapping("/departments/tickets/{id}")
-    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id) {
+    public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
         try {
+            if (!user.isAdmin()){
+                if (user.getDepartment().getDepartmentID() != id) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                            "You cannot access metrics for another department.");
+                }
+            }
             return ResponseEntity.ok(metricsService.getMetricsDepartmentsForDepartment(id));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -124,7 +130,7 @@ public class Controller {
     }
 
     // ======================================================
-    // HISTORISK MISROUTING
+    // ======= HISTORISK MISROUTING STATISTIK ===============
     // ======================================================
 
     @GetMapping("/metrics/misrouting/daily")
@@ -146,7 +152,7 @@ public class Controller {
     }
 
     // ======================================================
-    // DEPARTMENTS
+    // =================== DEPARTMENTS ======================
     // ======================================================
 
     @GetMapping("/departments")
@@ -201,7 +207,7 @@ public class Controller {
     }
 
     // ======================================================
-    // PRIORITIES
+    // ==================== PRIORITIES ======================
     // ======================================================
 
     @GetMapping("/priorities")
@@ -249,7 +255,7 @@ public class Controller {
     }
 
     // ======================================================
-    // TICKETS
+    // ===================== TICKETS ========================
     // ======================================================
 
     @PostMapping("/tickets/{id}/misrouted")
@@ -260,36 +266,23 @@ public class Controller {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke markere ticket som forkert routing.");
         }
     }
-
     @PostMapping("/tickets/{id}/correct")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markTicketAsCorrect(@PathVariable int id) {
         try {
             metricsService.markTicketDepartmentAsCorrect(id);
             return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            // log exception server-side
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke markere ticket som korrekt routing: " + e.getMessage());
         }
     }
 
-    // ⭐ NYT ENDPOINT → ADMIN KAN ÆNDRE PRIORITET
-    @PostMapping("/tickets/{id}/priority/{priorityId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateTicketPriority(
-            @PathVariable int id,
-            @PathVariable int priorityId
-    ) {
-        try {
-            metricsService.updateTicketPriority(id, priorityId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Kunne ikke opdatere prioritet: " + e.getMessage());
-        }
-    }
 }

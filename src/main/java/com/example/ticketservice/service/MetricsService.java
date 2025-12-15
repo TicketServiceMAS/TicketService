@@ -58,10 +58,11 @@ public class MetricsService {
         return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
 
-    public RoutingStatsDepartmentDTO getRoutingStatsOneDepartment(int id) {
+    // ======================================================
+    // ========== ROUTING STATS – PRIORITIES ================
+    // ======================================================
 
-        List<MetricsDepartment> all =
-                metricsDepartmentRepository.findMetricsDepartmentByDepartmentDepartmentID(id);
+    public RoutingStatsPriorityDTO getRoutingStatsPriorities() {
 
         List<MetricsPriority> all = metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsPriority)
@@ -70,11 +71,10 @@ public class MetricsService {
         int total = all.size();
         int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
         int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
-        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
+        return new RoutingStatsPriorityDTO(total, success, failure, accuracy);
     }
 
     public RoutingStatsPriorityDTO getRoutingStatsOnePriority(int priorityId) {
@@ -84,9 +84,7 @@ public class MetricsService {
                 .filter(mp -> mp.getPriority().getPriorityID() == priorityId)
                 .collect(Collectors.toList());
 
-        List<MetricsPriority> all = metricsPriorityRepository.findAll();
         int total = all.size();
-
         int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
         int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
 
@@ -105,10 +103,11 @@ public class MetricsService {
         int total = all.size();
         int success = (int) all.stream().filter(x -> x.getStatus() == Status.SUCCESS).count();
         int failure = (int) all.stream().filter(x -> x.getStatus() == Status.FAILURE).count();
+        int defaulted = (int) all.stream().filter(x -> x.getStatus() == Status.DEFAULTED).count();
 
         double accuracy = total > 0 ? (double) success / total : 0.0;
 
-        return new RoutingStatsPriorityDTO(total, success, failure, accuracy);
+        return new RoutingStatsDepartmentDTO(total, success, failure, defaulted, accuracy);
     }
 
     // ======================================================
