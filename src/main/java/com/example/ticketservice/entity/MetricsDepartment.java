@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "metrics_department")
 public class MetricsDepartment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int metricsDepartmentID;
