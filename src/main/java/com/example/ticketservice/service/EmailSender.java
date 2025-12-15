@@ -4,13 +4,11 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Properties;
 
-import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.entity.Mail;
-import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.*;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
+import com.example.ticketservice.repository.MetricsRepository;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
@@ -23,12 +21,15 @@ public class EmailSender {
     private MetricsDepartmentRepository metricsDepartmentRepository;
     private MetricsPriorityRepository metricsPriorityRepository;
 
+    private MetricsRepository metricsRepository;
+
     private DepartmentRepository departmentRepository;
 
-    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository){
+    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository, MetricsRepository metricsRepository){
         this.metricsDepartmentRepository = metricsDepartmentRepository;
         this.metricsPriorityRepository = metricsPriorityRepository;
         this.departmentRepository = departmentRepository;
+        this.metricsRepository = metricsRepository;
     }
 
     // Erstat disse med dine egne oplysninger:
@@ -85,23 +86,27 @@ public class EmailSender {
     }
 
     public void createMetrics(String newSubject, Mail mail){
+
+
         MetricsPriority metricsPriority = new MetricsPriority();
-        metricsPriority.setSubject(newSubject);
-        metricsPriority.setDate(LocalDate.now());
         metricsPriority.setStatus(Status.SUCCESS);
         metricsPriority.setPriority(mail.getPriority());
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
-        metricsDepartment.setSubject(newSubject);
-        metricsDepartment.setDate(LocalDate.now());
         metricsDepartment.setStatus(Status.SUCCESS);
         metricsDepartment.setDepartment(mail.getDepartment());
         if (mail.getDepartment().getDepartmentName().equals("DEFAULTED")){
             metricsDepartment.setStatus(Status.DEFAULTED);
         }
 
+        Metrics metrics = new Metrics();
+        metrics.setSubject(newSubject);
+        metrics.setDate(LocalDate.now());
+        metrics.setMetricsDepartment(metricsDepartment);
+        metrics.setMetricsPriority(metricsPriority);
         metricsDepartmentRepository.save(metricsDepartment);
         metricsPriorityRepository.save(metricsPriority);
+        metricsRepository.save(metrics);
 
 
 
