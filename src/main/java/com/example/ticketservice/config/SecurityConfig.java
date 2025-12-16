@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -31,37 +32,51 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for APIs
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
-                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+                // 🔒 API → ingen sessions
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // ❌ CSRF fra (API + JWT)
+                .csrf(csrf -> csrf.disable())
+
+                // 🌍 CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 🧠 Authorization
                 .authorizeHttpRequests(auth -> auth
-                        // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Allow login, register, and other auth endpoints
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/ticketservice/**").permitAll()
-                        // Allow H2 console if needed
+                        .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        // All other endpoints require authentication
+
+                        // alt andet kræver auth (roller styres af @PreAuthorize)
                         .anyRequest().authenticated()
                 )
-                // Add JWT filter before Spring Security authentication
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+                // 🧩 JWT filter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // H2 console
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
 
-    // CORS configuration
+    // 🌍 CORS config
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:63342")); // Frontend origin
-        config.setAllowedMethods(List.of("*")); // Allow GET, POST, PUT, DELETE, OPTIONS
+        config.setAllowedOrigins(List.of("http://localhost:63342"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("Authorization")); // Optional: if frontend reads token from headers
+        config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -69,15 +84,20 @@ public class SecurityConfig {
         return source;
     }
 
-    // Authentication manager for Spring Security
+    // 🔐 AuthenticationManager
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config
+    ) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // Configure custom user details service and password encoder
+    // 👤 UserDetails + PasswordEncoder
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth, @Lazy CustomUserDetailsService customUserDetailsService) throws Exception {
+    public void configure(
+            AuthenticationManagerBuilder auth,
+            @Lazy CustomUserDetailsService customUserDetailsService
+    ) throws Exception {
         auth.userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder);
     }

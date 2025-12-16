@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +43,7 @@ public class AuthController {
         return userService.getUser(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/user")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
@@ -87,6 +89,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 }
 
 class AuthRequest {
