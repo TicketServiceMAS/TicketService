@@ -24,6 +24,9 @@ public class Metrics {
     @Column(name = "subject", nullable = false)
     private String subject;
 
+    @Column(name = "content")
+    private String content;
+
     @Column(name = "date", nullable = false)
     private LocalDate date;
 

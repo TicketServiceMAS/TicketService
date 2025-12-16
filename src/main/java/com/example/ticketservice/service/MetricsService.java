@@ -139,11 +139,12 @@ public class MetricsService {
                 .sorted(Comparator.comparing(Metrics::getDate))
                 // map to DTO
                 .map(metrics -> new TicketDTO(
-                        metrics.getMetricsDepartment().getMetricsDepartmentID(),           // id (brugt som ticketId i frontend)
-                        metrics.getMetricsDepartment().getStatus(),                         // status
-                        metrics.getMetricsPriority().getPriority().getPriorityName(),      // priority
-                        metrics.getSubject(),                                              // subject
-                        metrics.getDate()                                                  // date
+                        metrics.getMetricsDepartment().getMetricsDepartmentID(), // id
+                        metrics.getMetricsDepartment().getStatus(),              // status
+                        metrics.getMetricsPriority().getPriority().getPriorityName(), // priority
+                        metrics.getSubject(),
+                        metrics.getContent(),// subject
+                        metrics.getDate()                                         // date
                 ))
                 .collect(Collectors.toList());
     }

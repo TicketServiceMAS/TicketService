@@ -39,9 +39,11 @@ public class TicketRouter {
         List<Mail> mails = emailReceiver.receiveMail();
         if (!mails.isEmpty()) {
             for (Mail mail : mails) {
+                System.out.println("Handling mail: " + mail.getContent());
                 analyzer(mail);
                 mail.setID();
                 emailSender.sendMail(mail);
+                System.out.println("The mail: " + mail.subject + " has been send");
             }
         }
     }
@@ -53,9 +55,11 @@ public class TicketRouter {
     public void analyzer(Mail mail) {
         String departmentName = routeDepartment(mail.subject, mail.content);
         Department department = departmentRepository.getDepartmentByDepartmentName(departmentName);
+        System.out.println("The department is: " + department.getDepartmentName());
 
         String priorityName = routePriority(mail.subject, mail.content);
         Priority priority = priorityRepository.getPriorityByPriorityName(priorityName);
+        System.out.println("The priority is: " + priority.getPriorityName());
 
         mail.setDepartment(department);
         mail.setPriority(priority);
@@ -167,7 +171,7 @@ public class TicketRouter {
                 - Fejl i CRM-processer, workflows, dashboards.
 
                 Hvis ticketen IKKE passer tydeligt i nogen kategori:
-                Svar med DEFAULT
+                Svar med DEFAULTED
 
                 Dette inkluderer:
                 - Uklar tekst, ingen reel kontekst.
