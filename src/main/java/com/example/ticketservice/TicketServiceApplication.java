@@ -24,7 +24,7 @@ public class TicketServiceApplication {
         SpringApplication.run(TicketServiceApplication.class, args);
     }
 
-    /*@Component
+    @Component
     public class EmailScheduler {
 
         private final TicketRouter ticketRouter;
@@ -40,5 +40,5 @@ public class TicketServiceApplication {
             System.out.println("Ran analyzer");
             ticketRouter.AnalyzeMail();
         }
-    }*/
+    }
 }
