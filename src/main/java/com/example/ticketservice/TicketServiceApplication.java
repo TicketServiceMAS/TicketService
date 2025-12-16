@@ -35,8 +35,9 @@ public class TicketServiceApplication {
         }
 
         // Runs every 60 seconds
-        @Scheduled(fixedRate = 60000)
+        @Scheduled(fixedRate = 20000)
         public void runEmailAnalyzer() {
+            System.out.println("Ran analyzer");
             ticketRouter.AnalyzeMail();
         }
     }

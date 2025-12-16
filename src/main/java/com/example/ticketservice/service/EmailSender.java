@@ -38,6 +38,7 @@ public class EmailSender {
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
+        System.out.println(mail.getDepartment().getMailAddress());
         String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
 
         // 1. Opsætning af SMTP-egenskaber (Gmail)
@@ -101,12 +102,12 @@ public class EmailSender {
 
         Metrics metrics = new Metrics();
         metrics.setSubject(newSubject);
+        metrics.setContent(mail.getContent());
         metrics.setDate(LocalDate.now());
         metrics.setMetricsDepartment(metricsDepartment);
         metrics.setMetricsPriority(metricsPriority);
-        metricsDepartmentRepository.save(metricsDepartment);
-        metricsPriorityRepository.save(metricsPriority);
         metricsRepository.save(metrics);
+
 
 
 
