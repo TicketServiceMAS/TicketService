@@ -138,7 +138,8 @@ public class MetricsService {
                         metrics.getMetricsDepartment().getMetricsDepartmentID(), // id
                         metrics.getMetricsDepartment().getStatus(),              // status
                         metrics.getMetricsPriority().getPriority().getPriorityName(), // priority
-                        metrics.getSubject(),                                     // subject
+                        metrics.getSubject(),
+                        metrics.getContent(),// subject
                         metrics.getDate()                                         // date
                 ))
                 .collect(Collectors.toList());

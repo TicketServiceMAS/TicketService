@@ -16,6 +16,7 @@ public class TicketDTO {
     private int id;             // MetricsDepartment ID
     private Status status;      // MetricsDepartment status
     private String priority;    // MetricsPriority priority name
-    private String subject;     // Metrics subject
+    private String subject;
+    private String content;// Metrics subject
     private LocalDate date;     // Metrics date
 }
