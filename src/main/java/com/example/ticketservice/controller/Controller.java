@@ -4,11 +4,14 @@ import com.example.ticketservice.dto.DepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
 import com.example.ticketservice.dto.TicketDTO;
-import com.example.ticketservice.entity.*;
+import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.Priority;
+import com.example.ticketservice.entity.User;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.service.PriorityService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticketservice")
-@CrossOrigin// frontend origin
+@CrossOrigin
 public class Controller {
 
     private final MetricsService metricsService;
@@ -39,7 +42,7 @@ public class Controller {
     }
 
     // ======================================================
-    // ================ ROUTING STATS ========================
+    // ================ ROUTING STATS =======================
     // ======================================================
 
     @GetMapping("/stats")
@@ -94,7 +97,7 @@ public class Controller {
     public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         try {
-            if (!user.isAdmin()){
+            if (!user.isAdmin()) {
                 if (user.getDepartment().getDepartmentID() != id) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                             "You cannot access metrics for another department.");
@@ -183,8 +186,7 @@ public class Controller {
     public ResponseEntity<?> updateDepartment(
             @PathVariable int id,
             @RequestBody DepartmentDTO dto
-    )
-    {
+    ) {
         Department department = new Department();
         department.setDepartmentName(dto.getDepartmentName());
         department.setMailAddress(dto.getMailAddress());
@@ -259,10 +261,11 @@ public class Controller {
     // ======================================================
 
     @PostMapping("/tickets/{id}/misrouted")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markTicketAsMisrouted(@PathVariable int id) {
         try {
-            metricsService.markTicketDepartmentAsMisrouted(id);  // backend update logic
-            return ResponseEntity.ok().build();        // frontend expects no body
+            metricsService.markTicketDepartmentAsMisrouted(id);
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
@@ -270,7 +273,9 @@ public class Controller {
                     .body("Kunne ikke markere ticket som forkert routing.");
         }
     }
+
     @PostMapping("/tickets/{id}/correct")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> markTicketAsCorrect(@PathVariable int id) {
         try {
             metricsService.markTicketDepartmentAsCorrect(id);
@@ -278,11 +283,28 @@ public class Controller {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            // log exception server-side
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke markere ticket som korrekt routing: " + e.getMessage());
         }
     }
 
+    // ===== NYT ENDPOINT: OPDATER TICKET PRIORITET =========
+
+    @PostMapping("/tickets/{id}/priority/{priorityId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateTicketPriority(
+            @PathVariable int id,
+            @PathVariable int priorityId
+    ) {
+        try {
+            metricsService.updateTicketPriority(id, priorityId);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Kunne ikke opdatere prioritet: " + e.getMessage());
+        }
+    }
 }
