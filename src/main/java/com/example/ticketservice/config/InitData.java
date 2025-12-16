@@ -100,7 +100,7 @@ public class InitData implements CommandLineRunner {
 
 
         Metrics mL1P3 = new Metrics();
-        mL1P3.setSubject("INC-40001 L1 password reset P3");
+        mL1P3.setSubject("INC-40001 supermail@mail.com L1 password reset P3");
         mL1P3.setContent("I WANT MY PASSWORD RESESTT!!!!");
         mL1P3.setDate(LocalDate.of(2025, 11, 1));
 
@@ -119,7 +119,7 @@ public class InitData implements CommandLineRunner {
 
 
         Metrics mL1P2 = new Metrics();
-        mL1P2.setSubject("INC-40002 L1 account unlock P2");
+        mL1P2.setSubject("INC-40002 megamail@email.com L1 account unlock P2");
         mL1P2.setContent("unlock account pls");
         mL1P2.setDate(LocalDate.of(2025, 11, 2));
 
@@ -137,7 +137,7 @@ public class InitData implements CommandLineRunner {
         metricsRepository.save(mL1P2);
 
         Metrics mL2P2 = new Metrics();
-        mL2P2.setSubject("INC-40003 L2 escalation P2");
+        mL2P2.setSubject("INC-40003 ultramail@mail.com L2 escalation P2");
         mL2P2.setContent(":(");
         mL2P2.setDate(LocalDate.of(2025, 11, 3));
 
@@ -155,7 +155,7 @@ public class InitData implements CommandLineRunner {
         metricsRepository.save(mL2P2);
 
         Metrics mL2P1 = new Metrics();
-        mL2P1.setSubject("INC-40004 L2 outage P1");
+        mL2P1.setSubject("INC-40004 gmail@hotmail.com L2 outage P1");
         mL2P1.setContent("Det virker ikke. Kæmpe stor outage");
         mL2P1.setDate(LocalDate.of(2025, 11, 4));
 
@@ -172,7 +172,7 @@ public class InitData implements CommandLineRunner {
 
         metricsRepository.save(mL2P1);
         Metrics mWpP3 = new Metrics();
-        mWpP3.setSubject("INC-40005 Workplace onboarding P3");
+        mWpP3.setSubject("INC-40005 mailemail@mail.com Workplace onboarding P3");
         mWpP3.setContent("Jeg skal have lavet 500 powerpoint slides til i morgen. Hjælp mig ");
         mWpP3.setDate(LocalDate.of(2025, 11, 5));
 
@@ -189,7 +189,7 @@ public class InitData implements CommandLineRunner {
 
         metricsRepository.save(mWpP3);
         Metrics mWpP2 = new Metrics();
-        mWpP2.setSubject("INC-40006 Workplace hardware P2");
+        mWpP2.setSubject("INC-40006 megamail@mail.com Workplace hardware P2");
         mWpP2.setContent("Jytte fra marketing har brug for en ny laptop. Hun har hældt kaffe på den hun har nu.");
         mWpP2.setDate(LocalDate.of(2025, 11, 6));
 
@@ -206,7 +206,7 @@ public class InitData implements CommandLineRunner {
 
         metricsRepository.save(mWpP2);
         Metrics mNetP1 = new Metrics();
-        mNetP1.setSubject("INC-40007 Network outage P1");
+        mNetP1.setSubject("INC-40007 123mail@mail.com Network outage P1");
         mNetP1.setContent("Fix internettet!!!!!!");
         mNetP1.setDate(LocalDate.of(2025, 11, 7));
 
@@ -223,7 +223,7 @@ public class InitData implements CommandLineRunner {
 
         metricsRepository.save(mNetP1);
         Metrics mNetP3 = new Metrics();
-        mNetP3.setSubject("INC-40008 Network maintenance P3");
+        mNetP3.setSubject("INC-40008 booh@mail.com Network maintenance P3");
         mNetP3.setDate(LocalDate.of(2025, 11, 8));
 
         MetricsDepartment mdNetP3 = new MetricsDepartment();
