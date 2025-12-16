@@ -6,9 +6,9 @@ import com.example.ticketservice.dto.TicketDTO;
 import com.example.ticketservice.entity.Metrics;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.Priority;
 import com.example.ticketservice.repository.MetricsRepository;
 import com.example.ticketservice.util.Status;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,10 +21,14 @@ import java.util.stream.Collectors;
 public class MetricsService {
 
     private final MetricsRepository metricsRepository;
+    private final PriorityService priorityService;
 
-    public MetricsService(MetricsRepository metricsRepository) {
+    public MetricsService(MetricsRepository metricsRepository,
+                          PriorityService priorityService) {
         this.metricsRepository = metricsRepository;
+        this.priorityService = priorityService;
     }
+
     public List<TicketDTO> getAllTickets() {
         return metricsRepository.findAll().stream()
                 .map(metrics -> {
@@ -38,6 +42,7 @@ public class MetricsService {
                 })
                 .collect(Collectors.toList());
     }
+
     // ======================================================
     // ========== ROUTING STATS – DEPARTMENTS ===============
     // ======================================================
@@ -126,7 +131,6 @@ public class MetricsService {
         return metrics.getMetricsPriority();
     }
 
-
     public List<TicketDTO> getMetricsDepartmentsForDepartment(int departmentId) {
         return metricsRepository.findAll().stream()
                 // filter by department
@@ -135,14 +139,15 @@ public class MetricsService {
                 .sorted(Comparator.comparing(Metrics::getDate))
                 // map to DTO
                 .map(metrics -> new TicketDTO(
-                        metrics.getMetricsDepartment().getMetricsDepartmentID(), // id
-                        metrics.getMetricsDepartment().getStatus(),              // status
-                        metrics.getMetricsPriority().getPriority().getPriorityName(), // priority
-                        metrics.getSubject(),                                     // subject
-                        metrics.getDate()                                         // date
+                        metrics.getMetricsDepartment().getMetricsDepartmentID(),           // id (brugt som ticketId i frontend)
+                        metrics.getMetricsDepartment().getStatus(),                         // status
+                        metrics.getMetricsPriority().getPriority().getPriorityName(),      // priority
+                        metrics.getSubject(),                                              // subject
+                        metrics.getDate()                                                  // date
                 ))
                 .collect(Collectors.toList());
     }
+
     public List<MetricsDepartment> getMetricsHistoryForDepartment(int departmentId) {
         return metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsDepartment)                // get the department child
@@ -155,7 +160,7 @@ public class MetricsService {
         return metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsPriority)
                 .filter(mp -> mp.getPriority().getPriorityID() == priorityId)
-                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))  // optional: replace with date if available
+                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))
                 .collect(Collectors.toList());
     }
 
@@ -166,14 +171,14 @@ public class MetricsService {
     public List<MetricsDepartment> getAllMetricsDepartments() {
         return metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsDepartment)
-                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))  // or sort by date if you have
+                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))
                 .collect(Collectors.toList());
     }
 
     public List<MetricsPriority> getAllMetricsPriorities() {
         return metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsPriority)
-                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))  // or sort by date if you have
+                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))
                 .collect(Collectors.toList());
     }
 
@@ -209,7 +214,8 @@ public class MetricsService {
                         Collectors.counting()
                 ));
     }
-// ==================== PRIORITY =======================
+
+    // ==================== PRIORITY =======================
 
     public void markTicketPriorityAsMisrouted(int metricsId) {
         Metrics metrics = metricsRepository.findById(metricsId)
@@ -236,5 +242,26 @@ public class MetricsService {
                         Metrics::getDate,
                         Collectors.counting()
                 ));
+    }
+
+    // ======================================================
+    // ================ UPDATE TICKET PRIORITY ==============
+    // ======================================================
+
+    /**
+     * Opdaterer prioriteten for et metrics/ticket.
+     * metricsId = ID på Metrics (som du bruger som ticketId i frontend)
+     * priorityId = ID på Priority (1=P1, 2=P2, 3=P3, 4=SIMA)
+     */
+    public void updateTicketPriority(int metricsId, int priorityId) {
+        Metrics metrics = metricsRepository.findById(metricsId)
+                .orElseThrow(() -> new IllegalArgumentException("Metrics not found with ID " + metricsId));
+
+        Priority priority = priorityService.getPriority(priorityId); // antager at denne metode findes i PriorityService
+
+        MetricsPriority metricsPriority = metrics.getMetricsPriority();
+        metricsPriority.setPriority(priority);
+
+        metricsRepository.save(metrics);
     }
 }
