@@ -1,9 +1,6 @@
 package com.example.ticketservice.controller;
 
-import com.example.ticketservice.dto.DepartmentDTO;
-import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
-import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
-import com.example.ticketservice.dto.TicketDTO;
+import com.example.ticketservice.dto.*;
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
@@ -12,6 +9,7 @@ import com.example.ticketservice.entity.User;
 import com.example.ticketservice.service.DepartmentService;
 import com.example.ticketservice.service.MetricsService;
 import com.example.ticketservice.service.PriorityService;
+import com.example.ticketservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,20 +29,28 @@ public class Controller {
     private final DepartmentService departmentService;
     private final PriorityService priorityService;
 
+    private final UserService userService;
+
     public Controller(
             MetricsService metricsService,
             DepartmentService departmentService,
-            PriorityService priorityService
+            PriorityService priorityService,
+            UserService userService
     ) {
         this.metricsService = metricsService;
         this.departmentService = departmentService;
         this.priorityService = priorityService;
+        this.userService = userService;
     }
 
     // ======================================================
     // ================ ROUTING STATS =======================
     // ======================================================
 
+    @PostMapping("/user")
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
     @GetMapping("/stats")
     public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
         return metricsService.getRoutingStatsDepartments();

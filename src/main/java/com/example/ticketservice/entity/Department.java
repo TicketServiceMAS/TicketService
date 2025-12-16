@@ -1,6 +1,7 @@
 package com.example.ticketservice.entity;
 
 import com.example.ticketservice.util.DepartmentName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,8 +24,11 @@ public class Department {
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<MetricsDepartment> metricsDepartments;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<User> user;
+
 
 }

@@ -39,8 +39,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         // Allow preflight requests
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Allow login, register, and other auth endpoints
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()                        // Allow login, register, and other auth endpoints// Allow login, register, and other auth endpoints
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/ticketservice/**").permitAll()
                         // Allow H2 console if needed
