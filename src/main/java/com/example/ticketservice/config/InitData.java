@@ -267,6 +267,70 @@ public class InitData implements CommandLineRunner {
         testUser1.setAdmin(false);
         userRepository.save(testUser1);
 
+        // ===== SERVICE_DESK_L1 =====
+        User serviceDeskL1 = new User();
+        serviceDeskL1.setUsername("servicedesk.l1");
+        serviceDeskL1.setDepartment(department);
+        serviceDeskL1.setPassword(new BCryptPasswordEncoder().encode("123"));
+        serviceDeskL1.setAdmin(false);
+        userRepository.save(serviceDeskL1);
+
+// ===== SERVICE_DESK_L2 =====
+        User serviceDeskL2 = new User();
+        serviceDeskL2.setUsername("servicedesk.l2");
+        serviceDeskL2.setDepartment(department1);
+        serviceDeskL2.setPassword(new BCryptPasswordEncoder().encode("123"));
+        serviceDeskL2.setAdmin(false);
+        userRepository.save(serviceDeskL2);
+
+// ===== WORKPLACE =====
+        User workplace = new User();
+        workplace.setUsername("workplace");
+        workplace.setDepartment(department2);
+        workplace.setPassword(new BCryptPasswordEncoder().encode("123"));
+        workplace.setAdmin(false);
+        userRepository.save(workplace);
+
+// ===== NETWORK =====
+        User network = new User();
+        network.setUsername("network");
+        network.setDepartment(department3);
+        network.setPassword(new BCryptPasswordEncoder().encode("123"));
+        network.setAdmin(false);
+        userRepository.save(network);
+
+// ===== SECURITY =====
+        User security = new User();
+        security.setUsername("security");
+        security.setDepartment(department4);
+        security.setPassword(new BCryptPasswordEncoder().encode("123"));
+        security.setAdmin(false);
+        userRepository.save(security);
+
+// ===== ERP =====
+        User erp = new User();
+        erp.setUsername("erp");
+        erp.setDepartment(department5);
+        erp.setPassword(new BCryptPasswordEncoder().encode("123"));
+        erp.setAdmin(false);
+        userRepository.save(erp);
+
+// ===== CRM =====
+        User crm = new User();
+        crm.setUsername("crm");
+        crm.setDepartment(department6);
+        crm.setPassword(new BCryptPasswordEncoder().encode("123"));
+        crm.setAdmin(false);
+        userRepository.save(crm);
+
+// ===== DEFAULTED =====
+        User defaulted = new User();
+        defaulted.setUsername("defaulted");
+        defaulted.setDepartment(department7);
+        defaulted.setPassword(new BCryptPasswordEncoder().encode("123"));
+        defaulted.setAdmin(false);
+        userRepository.save(defaulted);
+
 
     }
 }
