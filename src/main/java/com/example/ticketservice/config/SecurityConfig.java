@@ -3,6 +3,7 @@ package com.example.ticketservice.config;
 import com.example.ticketservice.JwtFilter;
 import com.example.ticketservice.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -24,7 +25,11 @@ import java.util.List;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+    //@Value("${url}")
+    //String url;
 
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -57,8 +62,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:63342")); // Frontend origin
-        config.setAllowedOrigins(List.of("https://ticketservicemas.github.io")); // Frontend origin
+        config.setAllowedOrigins(List.of(allowedOrigins.split(","))); // Frontend origin; // Frontend origin
         config.setAllowedMethods(List.of("*")); // Allow GET, POST, PUT, DELETE, OPTIONS
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization")); // Optional: if frontend reads token from headers
