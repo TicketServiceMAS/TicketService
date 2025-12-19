@@ -13,6 +13,7 @@ import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,8 +34,13 @@ public class EmailSender {
     }
 
     // Erstat disse med dine egne oplysninger:
-    private static final String SENDER_EMAIL = System.getenv("USERNAME");;
-    private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
+    @Value("${mail.username}")
+    private String SENDER_EMAIL;
+    //private static final String SENDER_EMAIL = System.getenv("USERNAME");;
+
+    @Value("${mail.password}")
+    private String APP_PASSWORD;
+    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
