@@ -58,7 +58,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:63342")); // Frontend origin
-        config.setAllowedOrigins(List.of("https://ticketservicemas.github.io/TicketServiceFE/")); // Frontend origin
+        config.setAllowedOrigins(List.of("https://ticketservicemas.github.io")); // Frontend origin
         config.setAllowedMethods(List.of("*")); // Allow GET, POST, PUT, DELETE, OPTIONS
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization")); // Optional: if frontend reads token from headers
