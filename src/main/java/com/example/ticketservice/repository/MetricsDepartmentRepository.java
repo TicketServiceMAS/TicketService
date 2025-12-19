@@ -1,11 +1,27 @@
 package com.example.ticketservice.repository;
-import com.example.ticketservice.entity.Department;
+
 import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.util.DepartmentName;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
+import java.util.List;
 
-public interface MetricsDepartmentRepository extends JpaRepository<MetricsDepartment, Integer>{
+public interface MetricsDepartmentRepository extends JpaRepository<MetricsDepartment, Integer> {
+
+
+    /**
+     * Finder alle MetricsDepartment-rækker (tickets) for et givent department.
+     *
+     * Forudsætter at MetricsDepartment har en relation:
+     *   private Department department;
+     *
+     * og at Department har feltet:
+     *   private int categoryID;
+     *
+     * Så vil Spring Data automatisk binde:
+     *   department.categoryID -> department_CategoryID i metodenavn.
+     */
+    List<MetricsDepartment> findByDepartment_DepartmentID(int departmentID);
+
+    List<MetricsDepartment> findMetricsDepartmentByDepartmentDepartmentID(int id);
 
 }

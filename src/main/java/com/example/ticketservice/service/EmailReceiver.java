@@ -6,15 +6,22 @@ import java.util.Properties;
 
 import com.example.ticketservice.entity.Mail;
 import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailReceiver {
 
     private static final String HOST = System.getenv("HOST");
-    private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
-    private static final String APP_PASSWORD = System.getenv("APP_PASSWORD"); // Vigtigt!
+
+    @Value("${mail.username}")
+    private String USERNAME;
+    //private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
+
+    @Value("${mail.password}")
+    private String APP_PASSWORD;
 
     public List<Mail> receiveMail() {
         List<Mail> mails = new ArrayList<>();
@@ -60,7 +67,16 @@ public class EmailReceiver {
                 // Marker e-mailen som LÆST efter behandling:
                 message.setFlag(Flags.Flag.SEEN, true);
 
-                    String subject =  message.getSubject();
+                    Address[] from = message.getFrom();
+                    String senderEmail = null;
+
+                    if (from != null && from.length > 0) {
+                        InternetAddress ia = (InternetAddress) from[0];
+                        senderEmail = ia.getAddress();
+                    }
+
+
+                    String subject =  senderEmail + " " + message.getSubject();
                     mails.add(new Mail(subject, content));
             }}
 

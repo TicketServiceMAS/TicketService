@@ -1,16 +1,19 @@
 package com.example.ticketservice.service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Properties;
 
-import com.example.ticketservice.entity.Mail;
-import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.entity.MetricsPriority;
+import com.example.ticketservice.entity.*;
+import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
+import com.example.ticketservice.repository.MetricsRepository;
 import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,17 +22,29 @@ public class EmailSender {
     private MetricsDepartmentRepository metricsDepartmentRepository;
     private MetricsPriorityRepository metricsPriorityRepository;
 
-    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository){
+    private MetricsRepository metricsRepository;
+
+    private DepartmentRepository departmentRepository;
+
+    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository, MetricsRepository metricsRepository){
         this.metricsDepartmentRepository = metricsDepartmentRepository;
         this.metricsPriorityRepository = metricsPriorityRepository;
+        this.departmentRepository = departmentRepository;
+        this.metricsRepository = metricsRepository;
     }
 
     // Erstat disse med dine egne oplysninger:
-    private static final String SENDER_EMAIL = System.getenv("USERNAME");;
-    private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
+    @Value("${mail.username}")
+    private String SENDER_EMAIL;
+    //private static final String SENDER_EMAIL = System.getenv("USERNAME");;
+
+    @Value("${mail.password}")
+    private String APP_PASSWORD;
+    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
+        System.out.println(mail.getDepartment().getMailAddress());
         String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
 
         // 1. Opsætning af SMTP-egenskaber (Gmail)
@@ -78,18 +93,27 @@ public class EmailSender {
     }
 
     public void createMetrics(String newSubject, Mail mail){
+
+
         MetricsPriority metricsPriority = new MetricsPriority();
-        metricsPriority.setSubject(newSubject);
         metricsPriority.setStatus(Status.SUCCESS);
+        metricsPriority.setPriority(mail.getPriority());
 
         MetricsDepartment metricsDepartment = new MetricsDepartment();
-        metricsDepartment.setSubject(newSubject);
         metricsDepartment.setStatus(Status.SUCCESS);
-        if (mail.getDepartment().getDepartmentName()== DepartmentName.DEFAULT){
+        metricsDepartment.setDepartment(mail.getDepartment());
+        if (mail.getDepartment().getDepartmentName().equals("DEFAULTED")){
             metricsDepartment.setStatus(Status.DEFAULTED);
         }
-        metricsDepartmentRepository.save(metricsDepartment);
-        metricsPriorityRepository.save(metricsPriority);
+
+        Metrics metrics = new Metrics();
+        metrics.setSubject(newSubject);
+        metrics.setContent(mail.getContent());
+        metrics.setDate(LocalDate.now());
+        metrics.setMetricsDepartment(metricsDepartment);
+        metrics.setMetricsPriority(metricsPriority);
+        metricsRepository.save(metrics);
+
 
 
 

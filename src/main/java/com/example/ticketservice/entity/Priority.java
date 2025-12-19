@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,5 +21,7 @@ public class Priority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int priorityID;
     @Column(name = "name", nullable = false)
-    private PriorityName priorityName;
+    private String priorityName;
+    @OneToMany(mappedBy = "priority", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MetricsPriority> metricsPriorities;
 }

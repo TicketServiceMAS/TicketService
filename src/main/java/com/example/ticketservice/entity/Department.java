@@ -1,8 +1,11 @@
 package com.example.ticketservice.entity;
 
 import com.example.ticketservice.util.DepartmentName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,11 +17,18 @@ import lombok.*;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int categoryID;
+    private int departmentID;
 
     @Column(name = "name", nullable = false)
-    private DepartmentName departmentName;
+    private String departmentName;
     @Column(name = "mailAddress", nullable = false)
     private String mailAddress;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<MetricsDepartment> metricsDepartments;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<User> user;
+
 
 }

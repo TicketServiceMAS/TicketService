@@ -1,14 +1,16 @@
 package com.example.ticketservice.repository;
+
 import com.example.ticketservice.entity.Department;
+import com.example.ticketservice.entity.Metrics;
 import com.example.ticketservice.entity.MetricsDepartment;
+import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.util.DepartmentName;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface DepartmentRepository extends JpaRepository<Department, Integer>{
-    Department getDepartmentByDepartmentName(String departmentName);
-
-    boolean existsDepartmentByDepartmentName(String name);
-
+public interface MetricsRepository extends JpaRepository<Metrics, Integer>{
 }
+
+

@@ -11,6 +11,7 @@ import java.util.UUID;
 public class Mail {
 
     public String ID;
+    public String mailAddress;
     public String subject;
     public String content;
 
