@@ -24,5 +24,4 @@ public interface MetricsDepartmentRepository extends JpaRepository<MetricsDepart
 
     List<MetricsDepartment> findMetricsDepartmentByDepartmentDepartmentID(int id);
 
-
 }

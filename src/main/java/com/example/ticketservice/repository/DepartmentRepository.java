@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface DepartmentRepository extends JpaRepository<Department, Integer>{
     Department getDepartmentByDepartmentName(String departmentName);
 
+    boolean existsDepartmentByDepartmentName(String name);
+
 }
