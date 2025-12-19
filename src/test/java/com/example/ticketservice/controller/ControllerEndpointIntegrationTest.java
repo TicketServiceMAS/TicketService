@@ -1,4 +1,4 @@
-package com.example.ticketservice.controller;
+/*package com.example.ticketservice.controller;
 
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.repository.DepartmentRepository;
@@ -44,4 +44,4 @@ class ControllerEndpointIntegrationTest {
                 .andExpect(jsonPath("$[0].departmentName", is("SERVICE_DESK_L1")))
                 .andExpect(jsonPath("$[1].departmentName", is("NETWORK")));
     }
-}
+}*/

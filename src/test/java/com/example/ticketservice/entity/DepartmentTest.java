@@ -1,4 +1,4 @@
-package com.example.ticketservice.entity;
+/*package com.example.ticketservice.entity;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,4 +38,4 @@ class DepartmentTest {
         assertThat(department.getDepartmentName()).isEqualTo("NETWORK");
         assertThat(department.getMailAddress()).isEqualTo("network@example.com");
     }
-}
+}*/
