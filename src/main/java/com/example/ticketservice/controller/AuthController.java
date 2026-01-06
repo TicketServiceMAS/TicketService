@@ -109,5 +109,4 @@ class AuthRequest {
         this.password = password;
     }
 
-    // getters/setters
 }

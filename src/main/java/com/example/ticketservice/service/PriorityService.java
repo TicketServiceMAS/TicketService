@@ -1,10 +1,6 @@
 package com.example.ticketservice.service;
 
-import com.example.ticketservice.dto.DepartmentDTO;
-import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.Priority;
-import com.example.ticketservice.repository.DepartmentRepository;
-import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.PriorityRepository;
 import org.springframework.stereotype.Service;
 

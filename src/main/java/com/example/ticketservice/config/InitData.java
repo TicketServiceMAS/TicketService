@@ -2,18 +2,13 @@ package com.example.ticketservice.config;
 
 import com.example.ticketservice.entity.*;
 import com.example.ticketservice.repository.*;
-import com.example.ticketservice.service.UserService;
-import com.example.ticketservice.util.DepartmentName;
-import com.example.ticketservice.util.PriorityName;
 import com.example.ticketservice.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Component
 public class InitData implements CommandLineRunner {

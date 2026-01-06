@@ -25,16 +25,11 @@ import java.util.List;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-    //@Value("${url}")
-    //String url;
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {

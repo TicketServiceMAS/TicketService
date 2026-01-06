@@ -1,17 +1,10 @@
 package com.example.ticketservice.service;
 
 import com.example.ticketservice.dto.UserDTO;
-import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.repository.DepartmentRepository;
-import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.userdetails.User;
 import com.example.ticketservice.entity.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -45,7 +38,6 @@ public class UserService {
         if (user.getDepartment() != null){
             userToUpdate.setDepartment(user.getDepartment());
         }
-        System.out.println(user.getDepartment());
         userToUpdate.setDepartment(user.getDepartment());
         if (!user.getPassword().isBlank()){
             String hashedPassword = passwordEncoder.encode(user.getPassword());

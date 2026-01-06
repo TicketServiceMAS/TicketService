@@ -1,7 +1,6 @@
 package com.example.ticketservice.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Properties;
 
 import com.example.ticketservice.entity.*;
@@ -9,7 +8,6 @@ import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.MetricsDepartmentRepository;
 import com.example.ticketservice.repository.MetricsPriorityRepository;
 import com.example.ticketservice.repository.MetricsRepository;
-import com.example.ticketservice.util.DepartmentName;
 import com.example.ticketservice.util.Status;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
@@ -19,17 +17,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailSender {
 
-    private MetricsDepartmentRepository metricsDepartmentRepository;
-    private MetricsPriorityRepository metricsPriorityRepository;
 
     private MetricsRepository metricsRepository;
 
-    private DepartmentRepository departmentRepository;
 
-    public EmailSender(MetricsDepartmentRepository metricsDepartmentRepository, MetricsPriorityRepository metricsPriorityRepository, DepartmentRepository departmentRepository, MetricsRepository metricsRepository){
-        this.metricsDepartmentRepository = metricsDepartmentRepository;
-        this.metricsPriorityRepository = metricsPriorityRepository;
-        this.departmentRepository = departmentRepository;
+    public EmailSender(MetricsRepository metricsRepository){
         this.metricsRepository = metricsRepository;
     }
 
@@ -44,7 +36,6 @@ public class EmailSender {
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
-        System.out.println(mail.getDepartment().getMailAddress());
         String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
 
         // 1. Opsætning af SMTP-egenskaber (Gmail)
@@ -83,7 +74,6 @@ public class EmailSender {
             // 4. Send Besked
             Transport.send(message);
 
-            System.out.println("E-mailen er sendt med succes!");
 
         } catch (MessagingException e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.example.ticketservice.service;
 
-import com.example.ticketservice.entity.User;
 import com.example.ticketservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
