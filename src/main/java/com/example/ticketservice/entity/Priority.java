@@ -1,6 +1,5 @@
 package com.example.ticketservice.entity;
 
-import com.example.ticketservice.util.PriorityName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

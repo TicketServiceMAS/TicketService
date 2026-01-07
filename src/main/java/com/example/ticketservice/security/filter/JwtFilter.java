@@ -1,6 +1,6 @@
-package com.example.ticketservice;
+package com.example.ticketservice.security.filter;
 
-import com.example.ticketservice.service.JwtService;
+import com.example.ticketservice.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

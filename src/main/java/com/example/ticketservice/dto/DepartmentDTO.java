@@ -1,6 +1,5 @@
 package com.example.ticketservice.dto;
 
-import com.example.ticketservice.util.DepartmentName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

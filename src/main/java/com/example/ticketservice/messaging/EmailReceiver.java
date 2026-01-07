@@ -1,4 +1,4 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.messaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ public class EmailReceiver {
 
     @Value("${mail.username}")
     private String USERNAME;
-    //private static final String USERNAME = System.getenv("USERNAME"); // Din fulde Gmail-adresse
 
     @Value("${mail.password}")
     private String APP_PASSWORD;

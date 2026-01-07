@@ -2,7 +2,6 @@ package com.example.ticketservice.controller;
 
 import com.example.ticketservice.dto.*;
 import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.entity.MetricsDepartment;
 import com.example.ticketservice.entity.MetricsPriority;
 import com.example.ticketservice.entity.Priority;
 import com.example.ticketservice.entity.User;
@@ -48,6 +47,7 @@ public class Controller {
     // ======================================================
 
     @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
     }

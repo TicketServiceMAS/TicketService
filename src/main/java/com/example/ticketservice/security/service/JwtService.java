@@ -1,4 +1,4 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.security.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import java.security.Key;
 import java.util.Date;
