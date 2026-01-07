@@ -47,6 +47,7 @@ public class Controller {
     // ======================================================
 
     @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
