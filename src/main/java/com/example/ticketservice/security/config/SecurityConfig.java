@@ -1,7 +1,7 @@
-package com.example.ticketservice.config;
+package com.example.ticketservice.security.config;
 
-import com.example.ticketservice.JwtFilter;
-import com.example.ticketservice.service.CustomUserDetailsService;
+import com.example.ticketservice.security.filter.JwtFilter;
+import com.example.ticketservice.security.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

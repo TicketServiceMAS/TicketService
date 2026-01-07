@@ -1,4 +1,4 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.messaging;
 
 import java.time.LocalDate;
 import java.util.Properties;
@@ -25,14 +25,11 @@ public class EmailSender {
         this.metricsRepository = metricsRepository;
     }
 
-    // Erstat disse med dine egne oplysninger:
     @Value("${mail.username}")
     private String SENDER_EMAIL;
-    //private static final String SENDER_EMAIL = System.getenv("USERNAME");;
 
     @Value("${mail.password}")
     private String APP_PASSWORD;
-    //private static final String APP_PASSWORD = "kicc hfld lpmd iybo";
 
     public void sendMail(Mail mail) {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();

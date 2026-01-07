@@ -1,4 +1,4 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.security.service;
 
 import com.example.ticketservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

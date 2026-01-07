@@ -1,4 +1,4 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.security.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

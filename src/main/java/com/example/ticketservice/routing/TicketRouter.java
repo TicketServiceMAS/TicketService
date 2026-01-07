@@ -1,8 +1,10 @@
-package com.example.ticketservice.service;
+package com.example.ticketservice.routing;
 
 import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.Mail;
 import com.example.ticketservice.entity.Priority;
+import com.example.ticketservice.messaging.EmailReceiver;
+import com.example.ticketservice.messaging.EmailSender;
 import com.example.ticketservice.repository.DepartmentRepository;
 import com.example.ticketservice.repository.PriorityRepository;
 import com.openai.client.OpenAIClient;

@@ -1,4 +1,4 @@
-package com.example.ticketservice.config;
+package com.example.ticketservice.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
