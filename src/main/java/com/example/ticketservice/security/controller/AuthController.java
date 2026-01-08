@@ -1,11 +1,9 @@
-package com.example.ticketservice.controller;
+package com.example.ticketservice.security.controller;
 
-import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
 import com.example.ticketservice.dto.UserDTO;
-import com.example.ticketservice.entity.Department;
 import com.example.ticketservice.entity.User;
-import com.example.ticketservice.service.CustomUserDetailsService;
-import com.example.ticketservice.service.JwtService;
+import com.example.ticketservice.security.service.CustomUserDetailsService;
+import com.example.ticketservice.security.service.JwtService;
 import com.example.ticketservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 //import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -109,5 +106,4 @@ class AuthRequest {
         this.password = password;
     }
 
-    // getters/setters
 }

@@ -1,6 +1,5 @@
 package com.example.ticketservice.entity;
 
-import com.example.ticketservice.util.DepartmentName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

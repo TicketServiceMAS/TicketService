@@ -169,13 +169,6 @@ public class MetricsService {
     // ============ HISTORICAL DATA FOR INDEX ===============
     // ======================================================
 
-    public List<MetricsDepartment> getAllMetricsDepartments() {
-        return metricsRepository.findAll().stream()
-                .map(Metrics::getMetricsDepartment)
-                .sorted(Comparator.comparing(a -> a.getMetrics().getDate()))
-                .collect(Collectors.toList());
-    }
-
     public List<MetricsPriority> getAllMetricsPriorities() {
         return metricsRepository.findAll().stream()
                 .map(Metrics::getMetricsPriority)
@@ -206,35 +199,6 @@ public class MetricsService {
     public Map<LocalDate, Long> getDailyMisroutingStatsDepartment(LocalDate from, LocalDate to) {
         return metricsRepository.findAll().stream()
                 .filter(metrics -> metrics.getMetricsDepartment().getStatus() == Status.FAILURE)
-                .filter(metrics -> {
-                    LocalDate d = metrics.getDate();
-                    return (d.isEqual(from) || d.isAfter(from)) && (d.isEqual(to) || d.isBefore(to));
-                })
-                .collect(Collectors.groupingBy(
-                        Metrics::getDate,
-                        Collectors.counting()
-                ));
-    }
-
-    // ==================== PRIORITY =======================
-
-    public void markTicketPriorityAsMisrouted(int metricsId) {
-        Metrics metrics = metricsRepository.findById(metricsId)
-                .orElseThrow(() -> new IllegalArgumentException("Metrics not found with ID " + metricsId));
-        metrics.getMetricsPriority().setStatus(Status.FAILURE);
-        metricsRepository.save(metrics);
-    }
-
-    public void markTicketPriorityAsCorrect(int metricsId) {
-        Metrics metrics = metricsRepository.findById(metricsId)
-                .orElseThrow(() -> new IllegalArgumentException("Metrics not found with ID " + metricsId));
-        metrics.getMetricsPriority().setStatus(Status.SUCCESS);
-        metricsRepository.save(metrics);
-    }
-
-    public Map<LocalDate, Long> getDailyMisroutingStatsPriority(LocalDate from, LocalDate to) {
-        return metricsRepository.findAll().stream()
-                .filter(metrics -> metrics.getMetricsPriority().getStatus() == Status.FAILURE)
                 .filter(metrics -> {
                     LocalDate d = metrics.getDate();
                     return (d.isEqual(from) || d.isAfter(from)) && (d.isEqual(to) || d.isBefore(to));

@@ -1,12 +1,10 @@
-/*package com.example.ticketservice.service;
+package com.example.ticketservice.service;
 
 import com.example.ticketservice.dto.RoutingStatsDepartmentDTO;
-import com.example.ticketservice.entity.Department;
-import com.example.ticketservice.entity.MetricsDepartment;
-import com.example.ticketservice.repository.DepartmentRepository;
-import com.example.ticketservice.repository.MetricsDepartmentRepository;
-import com.example.ticketservice.repository.MetricsPriorityRepository;
-import com.example.ticketservice.repository.PriorityRepository;
+import com.example.ticketservice.dto.RoutingStatsPriorityDTO;
+import com.example.ticketservice.dto.TicketDTO;
+import com.example.ticketservice.entity.*;
+import com.example.ticketservice.repository.MetricsRepository;
 import com.example.ticketservice.util.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,79 +14,260 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MetricsServiceTest {
 
     @Mock
-    private MetricsDepartmentRepository metricsDepartmentRepository;
+    private MetricsRepository metricsRepository;
 
     @Mock
-    private MetricsPriorityRepository metricsPriorityRepository;
-
-    @Mock
-    private DepartmentRepository departmentRepository;
-
-    @Mock
-    private PriorityRepository priorityRepository;
+    private PriorityService priorityService;
 
     @InjectMocks
     private MetricsService metricsService;
 
-    private Department serviceDeskL1;
-    private Department network;
+    private Metrics metrics1;
+    private Metrics metrics2;
 
     @BeforeEach
     void setUp() {
-        serviceDeskL1 = new Department(1, "SERVICE_DESK_L1", "l1@example.com", null);
-        network = new Department(2, "NETWORK", "network@example.com", null);
+        // Departments
+        Department dept1 = new Department();
+        dept1.setDepartmentID(1);
+        dept1.setDepartmentName("IT");
+        dept1.setMailAddress("it@example.com");
+
+        Department dept2 = new Department();
+        dept2.setDepartmentID(2);
+        dept2.setDepartmentName("HR");
+        dept2.setMailAddress("hr@example.com");
+
+        // MetricsDepartments
+        MetricsDepartment md1 = new MetricsDepartment();
+        md1.setMetricsDepartmentID(101);
+        md1.setDepartment(dept1);
+        md1.setStatus(Status.SUCCESS);
+
+        MetricsDepartment md2 = new MetricsDepartment();
+        md2.setMetricsDepartmentID(102);
+        md2.setDepartment(dept2);
+        md2.setStatus(Status.FAILURE);
+
+        // Priorities
+        Priority prio1 = new Priority();
+        prio1.setPriorityID(1);
+        prio1.setPriorityName("High");
+
+        Priority prio2 = new Priority();
+        prio2.setPriorityID(2);
+        prio2.setPriorityName("Low");
+
+        // MetricsPriorities
+        MetricsPriority mp1 = new MetricsPriority();
+        mp1.setMetricsPriorityID(201);
+        mp1.setPriority(prio1);
+        mp1.setStatus(Status.SUCCESS);
+
+        MetricsPriority mp2 = new MetricsPriority();
+        mp2.setMetricsPriorityID(202);
+        mp2.setPriority(prio2);
+        mp2.setStatus(Status.FAILURE);
+
+        // Metrics
+        metrics1 = new Metrics();
+        metrics1.setMetricsID(1001);
+        metrics1.setMetricsDepartment(md1);
+        metrics1.setMetricsPriority(mp1);
+        metrics1.setSubject("Ticket 1");
+        metrics1.setContent("Content 1");
+        metrics1.setDate(LocalDate.now().minusDays(1));
+        md1.setMetrics(metrics1);
+        mp1.setMetrics(metrics1);
+
+        metrics2 = new Metrics();
+        metrics2.setMetricsID(1002);
+        metrics2.setMetricsDepartment(md2);
+        metrics2.setMetricsPriority(mp2);
+        metrics2.setSubject("Ticket 2");
+        metrics2.setContent("Content 2");
+        metrics2.setDate(LocalDate.now());
+        md2.setMetrics(metrics2);
+        mp2.setMetrics(metrics2);
+
+        // Mock repository
+        lenient().when(metricsRepository.findAll()).thenReturn(Arrays.asList(metrics1, metrics2));
+        lenient().when(metricsRepository.findById(1001)).thenReturn(Optional.of(metrics1));
+        lenient().when(metricsRepository.findById(1002)).thenReturn(Optional.of(metrics2));
     }
 
     @Test
-    void getRoutingStatsDepartmentsCalculatesCountsAndAccuracy() {
-        List<MetricsDepartment> metrics = List.of(
-                new MetricsDepartment(1, "Subject 1", Status.SUCCESS, LocalDate.now(), serviceDeskL1),
-                new MetricsDepartment(2, "Subject 2", Status.FAILURE, LocalDate.now(), network),
-                new MetricsDepartment(3, "Subject 3", Status.DEFAULTED, LocalDate.now(), serviceDeskL1)
-        );
-
-        when(metricsDepartmentRepository.findAll()).thenReturn(metrics);
-
-        RoutingStatsDepartmentDTO result = metricsService.getRoutingStatsDepartments();
-
-        assertThat(result.getTotalTickets()).isEqualTo(3);
-        assertThat(result.getSuccessCount()).isEqualTo(1);
-        assertThat(result.getFailureCount()).isEqualTo(1);
-        assertThat(result.getDefaultedCount()).isEqualTo(1);
-        assertThat(result.getAccuracy()).isEqualTo(1.0 / 3.0);
+    void getAllTickets_returnsCorrectDTOs() {
+        List<TicketDTO> tickets = metricsService.getAllTickets();
+        assertEquals(2, tickets.size());
+        assertEquals(101, tickets.get(0).getId());
+        assertEquals("Low", tickets.get(1).getPriority());
     }
 
     @Test
-    void getDailyMisroutingStatsCountsFailuresWithinDateRange() {
-        LocalDate may1 = LocalDate.of(2024, 5, 1);
-        LocalDate may2 = LocalDate.of(2024, 5, 2);
-        LocalDate may3 = LocalDate.of(2024, 5, 3);
+    void getRoutingStatsDepartments_returnsCorrectCounts() {
+        RoutingStatsDepartmentDTO stats = metricsService.getRoutingStatsDepartments();
+        assertEquals(2, stats.getTotalTickets());
+        assertEquals(1, stats.getSuccessCount());
+        assertEquals(1, stats.getFailureCount());
+        assertEquals(0, stats.getDefaultedCount());
+        assertEquals(0.5, stats.getAccuracy());
+    }
 
-        List<MetricsDepartment> metrics = List.of(
-                new MetricsDepartment(1, "Subject 1", Status.FAILURE, may1, serviceDeskL1),
-                new MetricsDepartment(2, "Subject 2", Status.FAILURE, may1, serviceDeskL1),
-                new MetricsDepartment(3, "Subject 3", Status.SUCCESS, may2, network),
-                new MetricsDepartment(4, "Subject 4", Status.FAILURE, may2, network),
-                new MetricsDepartment(5, "Subject 5", Status.FAILURE, may3, network)
+    @Test
+    void getRoutingStatsPriorities_returnsCorrectCounts() {
+        RoutingStatsPriorityDTO stats = metricsService.getRoutingStatsPriorities();
+        assertEquals(2, stats.getTotalTickets());
+        assertEquals(1, stats.getSuccessCount());
+        assertEquals(1, stats.getFailureCount());
+        assertEquals(0.5, stats.getAccuracy());
+    }
+
+    @Test
+    void getMetricsDepartment_returnsCorrectMetricsDepartment() {
+        MetricsDepartment md = metricsService.getMetricsDepartment(1001);
+        assertEquals(101, md.getMetricsDepartmentID());
+        assertEquals(Status.SUCCESS, md.getStatus());
+    }
+
+    @Test
+    void getMetricsPriority_returnsCorrectMetricsPriority() {
+        MetricsPriority mp = metricsService.getMetricsPriority(1002);
+        assertEquals(202, mp.getMetricsPriorityID());
+        assertEquals(Status.FAILURE, mp.getStatus());
+    }
+
+    @Test
+    void getMetricsDepartment_invalidId_throwsException() {
+        when(metricsRepository.findById(9999)).thenReturn(Optional.empty());
+        Exception ex = assertThrows(IllegalArgumentException.class,
+                () -> metricsService.getMetricsDepartment(9999));
+        assertTrue(ex.getMessage().contains("Metrics not found with ID"));
+    }
+
+    @Test
+    void getMetricsDepartmentsForDepartment_returnsFilteredTickets() {
+        List<TicketDTO> tickets = metricsService.getMetricsDepartmentsForDepartment(1);
+        assertEquals(1, tickets.size());
+        assertEquals(101, tickets.get(0).getId());
+    }
+
+    @Test
+    void getRoutingStatsOnePriority_returnsCorrectCounts() {
+        RoutingStatsPriorityDTO stats = metricsService.getRoutingStatsOnePriority(1);
+        assertEquals(1, stats.getTotalTickets());
+        assertEquals(1, stats.getSuccessCount());
+        assertEquals(0, stats.getFailureCount());
+    }
+
+    @Test
+    void getRoutingStatsOneDepartment_returnsCorrectCounts() {
+        RoutingStatsDepartmentDTO stats = metricsService.getRoutingStatsOneDepartment(2);
+        assertEquals(1, stats.getTotalTickets());
+        assertEquals(0, stats.getSuccessCount());
+        assertEquals(1, stats.getFailureCount());
+        assertEquals(0, stats.getDefaultedCount());
+    }
+
+    @Test
+    void markTicketDepartmentAsMisrouted_setsStatusToFailure_andSaves() {
+        // Arrange
+        when(metricsRepository.findById(metrics1.getMetricsID()))
+                .thenReturn(Optional.of(metrics1));
+
+        // Act
+        metricsService.markTicketDepartmentAsMisrouted(metrics1.getMetricsID());
+
+        // Assert
+        assertEquals(Status.FAILURE, metrics1.getMetricsDepartment().getStatus());
+        verify(metricsRepository).save(metrics1);
+    }
+
+    @Test
+    void markTicketDepartmentAsCorrect_setsStatusToSuccess_andSaves() {
+        // Arrange
+        when(metricsRepository.findById(metrics1.getMetricsID()))
+                .thenReturn(Optional.of(metrics1));
+
+        // Act
+        metricsService.markTicketDepartmentAsCorrect(metrics1.getMetricsID());
+
+        // Assert
+        assertEquals(Status.SUCCESS, metrics1.getMetricsDepartment().getStatus());
+        verify(metricsRepository).save(metrics1);
+    }
+
+    @Test
+    void markTicketDepartmentAsMisrouted_metricsNotFound_throwsException() {
+        // Arrange
+        when(metricsRepository.findById(999)).thenReturn(Optional.empty());
+
+        // Act + Assert
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> metricsService.markTicketDepartmentAsMisrouted(999)
         );
 
-        when(metricsDepartmentRepository.findAll()).thenReturn(metrics);
-
-        Map<LocalDate, Long> result = metricsService.getDailyMisroutingStats(may1, may2);
-
-        assertThat(result)
-                .hasSize(2)
-                .containsEntry(may1, 2L)
-                .containsEntry(may2, 1L);
+        assertTrue(ex.getMessage().contains("Metrics not found"));
     }
-}*/
+
+    @Test
+    void getDailyMisroutingStatsDepartment_returnsCorrectCounts() {
+        // Arrange
+        LocalDate day1 = LocalDate.of(2024, 1, 1);
+        LocalDate day2 = LocalDate.of(2024, 1, 2);
+
+        metrics1.setDate(day1);
+        metrics1.getMetricsDepartment().setStatus(Status.FAILURE);
+
+        metrics2.setDate(day1);
+        metrics2.getMetricsDepartment().setStatus(Status.FAILURE);
+
+        Metrics metrics3 = createMetricsWithStatusAndDate(Status.SUCCESS, day2);
+        Metrics metrics4 = createMetricsWithStatusAndDate(Status.FAILURE, day2);
+
+        when(metricsRepository.findAll())
+                .thenReturn(List.of(metrics1, metrics2, metrics3, metrics4));
+
+        // Act
+        Map<LocalDate, Long> result =
+                metricsService.getDailyMisroutingStatsDepartment(day1, day2);
+
+        // Assert
+        assertEquals(2, result.get(day1));
+        assertEquals(1, result.get(day2));
+    }
+
+    private Metrics createMetricsWithStatusAndDate(Status status, LocalDate date) {
+        Department dept = new Department();
+        dept.setDepartmentID(1);
+
+        MetricsDepartment md = new MetricsDepartment();
+        md.setStatus(status);
+        md.setDepartment(dept);
+
+        Metrics metrics = new Metrics();
+        metrics.setDate(date);
+        metrics.setMetricsDepartment(md);
+
+        md.setMetrics(metrics);
+
+        return metrics;
+    }
+
+
+
+}
