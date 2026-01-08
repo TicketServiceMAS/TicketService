@@ -28,7 +28,6 @@ public class MetricsDepartment {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    // Back-reference to Metrics (inverse side)
     @JsonBackReference
     @OneToOne(mappedBy = "metricsDepartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Metrics metrics;

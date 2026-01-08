@@ -98,7 +98,6 @@ public class Controller {
         }
     }
 
-    // Liste af tickets for department (frontend uses this)
     @GetMapping("/departments/tickets/{id}")
     public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -294,8 +293,6 @@ public class Controller {
                     .body("Kunne ikke markere ticket som korrekt routing: " + e.getMessage());
         }
     }
-
-    // ===== NYT ENDPOINT: OPDATER TICKET PRIORITET =========
 
     @PostMapping("/tickets/{id}/priority/{priorityId}")
     @PreAuthorize("hasRole('ADMIN')")

@@ -30,28 +30,22 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Skip auth endpoints
         String path = request.getServletPath();
         if (path.startsWith("/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Get Authorization header
         final String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             final String token = authHeader.substring(7);
             final String username = jwtService.extractUsername(token);
 
-            // Only authenticate if SecurityContext is empty
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                // Load user from DB
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                // Validate token
                 if (jwtService.isTokenValid(token, userDetails)) {
-                    // Set authentication with authorities from User entity
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails, null, userDetails.getAuthorities());
