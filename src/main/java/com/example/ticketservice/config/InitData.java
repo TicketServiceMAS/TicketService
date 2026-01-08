@@ -74,7 +74,7 @@ public class InitData implements CommandLineRunner {
 
             Department department7 = new Department();
             department7.setDepartmentName("DEFAULTED");
-            department7.setMailAddress("sarahkiilm1310@gmail.com");
+            department7.setMailAddress("ticketdefault@atomicmail.io");
             departmentRepository.save(department7);
 
         if (priorityRepository.findAll().isEmpty()) {
