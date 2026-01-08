@@ -29,7 +29,6 @@ public class Metrics {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    // Metrics OWNS the relationship
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "metrics_department_id", unique = true, nullable = false)
     @JsonManagedReference

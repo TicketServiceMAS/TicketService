@@ -67,10 +67,7 @@ public class TicketRouter {
         return names;
     }
 
-    /**
-     * Sætter Department og Priority på mailen
-     * baseret på subject + body via OpenAI-routing.
-     */
+
     public void analyzer(Mail mail) {
         String departmentName = routeDepartment(mail.subject, mail.content);
         Department department = departmentRepository.getDepartmentByDepartmentName(departmentName);
@@ -84,9 +81,7 @@ public class TicketRouter {
         mail.setPriority(priority);
     }
 
-    /**
-     * Finder department-navn (SERVICE_DESK_L1, SERVICE_DESK_L2, WORKPLACE, NETWORK, SECURITY, ERP, CRM, DEFAULT)
-     */
+
     public String routeDepartment(String subject, String body) {
         List<String> departmentNames = getDepartmentNames();
         String prompt = buildPromptDepartment(departmentNames, subject, body);
@@ -147,9 +142,7 @@ public class TicketRouter {
                 """.formatted(departments, subject, body);
     }
 
-    /**
-     * Finder priority-navn (SIMA, P1, P2, P3)
-     */
+
     public String routePriority(String subject, String body) {
         List<String> priorityNames = getPriorityNames();
         String prompt = buildPromptPriority(priorityNames, subject, body);

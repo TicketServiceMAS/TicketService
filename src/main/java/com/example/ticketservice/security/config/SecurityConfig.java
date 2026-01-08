@@ -38,22 +38,17 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()                        // Allow login, register, and other auth endpoints// Allow login, register, and other auth endpoints
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/ticketservice/**").permitAll()
-                        // Allow H2 console if needed
                         .requestMatchers("/h2-console/**").permitAll()
-                        // All other endpoints require authentication
                         .anyRequest().authenticated()
                 )
-                // Add JWT filter before Spring Security authentication
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // CORS configuration
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -68,13 +63,11 @@ public class SecurityConfig {
         return source;
     }
 
-    // Authentication manager for Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // Configure custom user details service and password encoder
     @Autowired
     public void configure(AuthenticationManagerBuilder auth, @Lazy CustomUserDetailsService customUserDetailsService) throws Exception {
         auth.userDetailsService(customUserDetailsService)

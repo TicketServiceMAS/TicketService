@@ -133,11 +133,8 @@ public class MetricsService {
 
     public List<TicketDTO> getMetricsDepartmentsForDepartment(int departmentId) {
         return metricsRepository.findAll().stream()
-                // filter by department
                 .filter(metrics -> metrics.getMetricsDepartment().getDepartment().getDepartmentID() == departmentId)
-                // sort by parent Metrics.date
                 .sorted(Comparator.comparing(Metrics::getDate))
-                // map to DTO
                 .map(metrics -> new TicketDTO(
                         metrics.getMetricsDepartment().getMetricsDepartmentID(), // id
                         metrics.getMetricsDepartment().getStatus(),              // status
@@ -213,11 +210,7 @@ public class MetricsService {
     // ================ UPDATE TICKET PRIORITY ==============
     // ======================================================
 
-    /**
-     * Opdaterer prioriteten for et metrics/ticket.
-     * metricsId = ID på Metrics (som du bruger som ticketId i frontend)
-     * priorityId = ID på Priority (1=P1, 2=P2, 3=P3, 4=SIMA)
-     */
+
     public void updateTicketPriority(int metricsId, int priorityId) {
         Metrics metrics = metricsRepository.findById(metricsId)
                 .orElseThrow(() -> new IllegalArgumentException("Metrics not found with ID " + metricsId));
