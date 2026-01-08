@@ -31,30 +31,7 @@ public class AuthController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private UserService userService;
 
-    @GetMapping("/user/{id}")
-    public UserDTO getUser(@PathVariable int id) {
-        return userService.getUser(id);
-    }
-
-    @PostMapping("/user")
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
-    }
-
-    @PutMapping("/user/{id}")
-    public ResponseEntity<?> updateUser(
-            @PathVariable int id,
-            @RequestBody User user
-    ) {
-        try {
-            return ResponseEntity.ok(userService.updateUser(id, user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
@@ -75,15 +52,7 @@ public class AuthController {
     }
 
 
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable int id) {
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok("User deleted");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+
 }
 
 class AuthRequest {

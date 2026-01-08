@@ -46,11 +46,6 @@ public class Controller {
     // ================ ROUTING STATS =======================
     // ======================================================
 
-    @PostMapping("/user")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
-    }
     @GetMapping("/stats")
     public RoutingStatsDepartmentDTO getRoutingStatsDepartments() {
         return metricsService.getRoutingStatsDepartments();
@@ -98,7 +93,6 @@ public class Controller {
         }
     }
 
-    // Liste af tickets for department (frontend uses this)
     @GetMapping("/departments/tickets/{id}")
     public ResponseEntity<?> getMetricsDepartmentForDepartment(@PathVariable int id, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -295,8 +289,6 @@ public class Controller {
         }
     }
 
-    // ===== NYT ENDPOINT: OPDATER TICKET PRIORITET =========
-
     @PostMapping("/tickets/{id}/priority/{priorityId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateTicketPriority(
@@ -311,6 +303,44 @@ public class Controller {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Kunne ikke opdatere prioritet: " + e.getMessage());
+        }
+    }
+
+    // ======================================================
+    // ===================== USERS ========================
+    // ======================================================
+
+    @GetMapping("/user/{id}")
+    public UserDTO getUser(@PathVariable int id) {
+        return userService.getUser(id);
+    }
+
+    @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable int id,
+            @RequestBody User user
+    ) {
+        try {
+            return ResponseEntity.ok(userService.updateUser(id, user));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable int id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("User deleted");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

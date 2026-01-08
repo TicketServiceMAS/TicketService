@@ -28,7 +28,6 @@ public class MetricsPriority {
     @JoinColumn(name = "priorities_id", nullable = false)
     private Priority priority;
 
-    // Back-reference to Metrics (inverse side)
     @JsonBackReference
     @OneToOne(mappedBy = "metricsPriority", cascade = CascadeType.ALL, orphanRemoval = true)
     private Metrics metrics;

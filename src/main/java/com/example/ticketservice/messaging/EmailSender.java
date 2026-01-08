@@ -35,7 +35,6 @@ public class EmailSender {
         String RECIPIENT_EMAIL = mail.getDepartment().getMailAddress();
         String newSubject = mail.getID() + " " + mail.getSubject() + " " + mail.getDepartment().getDepartmentName() + " " + mail.getPriority().getPriorityName();
 
-        // 1. Opsætning af SMTP-egenskaber (Gmail)
         String content = mail.getContent();
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -43,23 +42,19 @@ public class EmailSender {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        // 2. Opret en Session med Autentifikation
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                // Brug den genererede App-adgangskode her
                 return new PasswordAuthentication(SENDER_EMAIL, APP_PASSWORD);
             }
         });
 
         try {
-            // 3. Opret Besked (Message)
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SENDER_EMAIL));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(RECIPIENT_EMAIL));
             message.setSubject(newSubject);
 
-            // Opret e-mailens indhold (body)
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
             mimeBodyPart.setContent(mail.getContent(), "text/plain; charset=utf-8");
 
@@ -68,7 +63,6 @@ public class EmailSender {
 
             message.setContent(multipart);
 
-            // 4. Send Besked
             Transport.send(message);
 
 

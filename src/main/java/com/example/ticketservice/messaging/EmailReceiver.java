@@ -24,7 +24,6 @@ public class EmailReceiver {
 
     public List<Mail> receiveMail() {
         List<Mail> mails = new ArrayList<>();
-        // 2. Definer IMAP/IMAPS egenskaberne
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imaps.host", HOST);
@@ -35,35 +34,29 @@ public class EmailReceiver {
         Folder inbox = null;
 
         try {
-            // 3. Opret Session og Forbind til Store
             Session session = Session.getDefaultInstance(properties);
             store = session.getStore("imaps");
 
-            // Brugernavn og App-adgangskode til login
             store.connect(HOST, USERNAME, APP_PASSWORD);
 
-            // 4. Åbn Indbakken (Folder)
             inbox = store.getFolder("INBOX");
-            // Åben i READ_WRITE for at kunne markere beskeder som læst/slettet
             inbox.open(Folder.READ_WRITE);
 
-            // 5. Hent beskederne
             Message[] messages = inbox.getMessages();
 
-            // Gå igennem hver besked
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
             if(!message.getFlags().contains(Flags.Flag.SEEN)) //Kigger kun på usete mails
                 {
 
 
-                // Hent selve e-mailens indhold
+
                 String content = getTextFromMessage(message);
 
                 // ********** Din Ticket-Oprettelses Logik **********
                 // F.eks.: Ticket ticket = createTicket(message.getSubject(), content, message.getFrom());
 
-                // Marker e-mailen som LÆST efter behandling:
+
                 message.setFlag(Flags.Flag.SEEN, true);
 
                     Address[] from = message.getFrom();
@@ -83,14 +76,11 @@ public class EmailReceiver {
             System.err.println("IMAPS udbyder ikke fundet: " + e.getMessage());
         } catch (MessagingException e) {
             System.err.println("Fejl i forbindelse til mailserveren: " + e.getMessage());
-            // Dette kan inkludere AuthenticationFailedException hvis adgangskoden er forkert
         } catch (Exception e) {
             System.err.println("Generel fejl under læsning: " + e.getMessage());
         } finally {
-            // 6. Luk forbindelserne
             try {
                 if (inbox != null && inbox.isOpen()) {
-                    // False betyder, at vi IKKE sletter beskeder, der er markeret til sletning
                     inbox.close(false);
                 }
                 if (store != null) {
@@ -103,14 +93,12 @@ public class EmailReceiver {
         return mails;
     }
 
-    // Hjælpefunktion til at udtrække teksten fra Message-objektet (forenklet)
     private static String getTextFromMessage(Message message) throws Exception {
         String result = "";
 
         if (message.isMimeType("text/plain")) {
             result = message.getContent().toString();
         } else if (message.isMimeType("multipart/*")) {
-            // Hvis e-mailen har flere dele (f.eks. både HTML og almindelig tekst)
             MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
             result = getTextFromMimeMultipart(mimeMultipart);
         }
@@ -126,9 +114,9 @@ public class EmailReceiver {
 
             if (bodyPart.isMimeType("text/plain")) {
                 result.append(bodyPart.getContent());
-                break; // Vi tager den første almindelige tekst-del og stopper
+                break;
             } else if (bodyPart.getContent() instanceof MimeMultipart) {
-                // Rekursivt kald, hvis en del indeholder en anden multipart
+
                 result.append(getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent()));
             }
         }
