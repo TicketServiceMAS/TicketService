@@ -23,7 +23,7 @@ public class Metrics {
     @Column(name = "subject", nullable = false)
     private String subject;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "NVARCHAR(MAX)")
     private String content;
 
     @Column(name = "date", nullable = false)
